@@ -2,8 +2,8 @@ import { state } from "../core/state.js";
 import { frame } from "../core/geometry.js";
 import { buildSVG, el } from "../core/svg.js";
 import { shapeById } from "../data/shapes.js";
-import { mix, hslToHex } from "../core/color.js";
-import { bandColors, sampleRamp, sortedStops } from "../core/gradients.js";
+import { mix } from "../core/color.js";
+import { signatureColour } from "../core/gradients.js";
 import { $ } from "../ui/dom.js";
 
 let liveSVG = null;
@@ -20,15 +20,6 @@ export function render() {
   stage.classList.toggle("transparent", state.bg.mode === "none");
   liveSVG = svg;
   fit();
-}
-
-/* The fill's signature colour: the accent band, the solid colour, the
-   ramp's midpoint, or the holo base hue. */
-function accentColour() {
-  if (state.mode === "stepped") return bandColors()[2];
-  if (state.mode === "solid") return state.stops[0].c;
-  if (state.mode === "holo") return hslToHex(state.holo.hue, state.holo.sat, state.holo.light);
-  return sampleRamp(sortedStops(), .5);
 }
 
 /* What the photo sits on: the canvas colour, or the stage behind a
@@ -50,7 +41,7 @@ function avatarGuide() {
   const r = av.r * k, ring = av.ring * k;
   const cx = f.x + av.cx * k, cy = f.y + av.cy * k;
   /* themed: the ring in the accent, the photo a tint of the canvas toward it */
-  const accent = accentColour(), base = baseColour();
+  const accent = signatureColour(), base = baseColour();
   const face = mix(base, accent, .14), figure = mix(base, accent, .4);
   const g = el("g", { "pointer-events": "none" });
   g.appendChild(el("circle", { cx, cy, r: r - ring / 2, fill: face, stroke: accent, "stroke-width": ring }));

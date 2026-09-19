@@ -1,5 +1,5 @@
 import { state, defaultFx, defaultBg } from "../core/state.js";
-import { bandOffsets, toBands } from "../core/gradients.js";
+import { bandOffsets, toBands, toSolid } from "../core/gradients.js";
 import { MODES } from "../data/modes.js";
 import { render } from "../render/stage.js";
 import { $ } from "../ui/dom.js";
@@ -14,7 +14,10 @@ export function applyPreset(p) {
     state.stops = p.cols.map((c, i) => ({ c, p: bandOffsets()[i] }));
     state.accent = p.cols[2];                 /* middle band is the accent */
   }
-  else if (p.stops) state.stops = p.stops.map(s => ({ c: s.c, p: s.p }));
+  else if (p.stops) {
+    state.stops = p.stops.map(s => ({ c: s.c, p: s.p }));
+    if (p.mode === "solid") state.solid = p.stops[0].c;
+  }
   if (p.angle !== undefined) state.angle = p.angle;
   if (p.snap !== undefined) state.snap = p.snap;
   if (p.holo)  state.holo = Object.assign({}, state.holo, p.holo);
@@ -28,6 +31,7 @@ export function applyPreset(p) {
 
 export function pickMode(id) {
   if (id === "stepped" && state.mode !== "stepped") toBands();
+  if (id === "solid" && state.mode !== "solid") toSolid();
   state.mode = id; state.preset = null;
   seg($("modeSeg"), MODES, id, pickMode);
   buildFill(); render(); paintPresets();

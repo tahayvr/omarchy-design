@@ -67,7 +67,7 @@ export function buildSVG() {
   const cover = { x: f.x, y: f.y, width: f.w, height: f.h };
 
   if (st.mode === "solid") {
-    paint.appendChild(el("rect", Object.assign({ fill: st.stops[0].c }, cover)));
+    paint.appendChild(el("rect", Object.assign({ fill: st.solid }, cover)));
   }
   else if (st.mode === "linear" || st.mode === "stepped") {
     const stepped = st.mode === "stepped";

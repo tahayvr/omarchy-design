@@ -33,7 +33,10 @@ function thumbFor(p) {
   const snapshot = { ...state };
   state.mode = p.mode;
   if (p.cols)       state.stops = p.cols.map((c, i) => ({ c, p: bandOffsets()[i] }));
-  else if (p.stops) state.stops = p.stops.map(s => ({ c: s.c, p: s.p }));
+  else if (p.stops) {
+    state.stops = p.stops.map(s => ({ c: s.c, p: s.p }));
+    if (p.mode === "solid") state.solid = p.stops[0].c;
+  }
   state.angle = p.angle !== undefined ? p.angle : 90;
   state.snap = p.snap !== undefined ? p.snap : true;
   if (p.holo)  state.holo = Object.assign({}, state.holo, p.holo);

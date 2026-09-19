@@ -74,14 +74,27 @@ export function bandsFromAccent(accent) {
   state.sel = 0;
 }
 
+/* The fill's signature colour: the accent band, the solid colour, the
+   ramp's midpoint, or the holo base hue. */
+export function signatureColour() {
+  if (state.mode === "stepped") return bandColors()[2];
+  if (state.mode === "solid") return state.solid;
+  if (state.mode === "holo") return hslToHex(state.holo.hue, state.holo.sat, state.holo.light);
+  return sampleRamp(sortedStops(), .5);
+}
+
 /* entering stepped mode from another material: take the colour the current
    fill has at the middle band and build the bands from it */
 export function toBands() {
   const O = bandOffsets(), S = sortedStops();
   const mid = (O[2] + O[3]) / 2;
-  const accent = state.mode === "solid" ? state.stops[0].c : sampleRamp(S, mid);
+  const accent = state.mode === "solid" ? state.solid : sampleRamp(S, mid);
   bandsFromAccent(accent);
 }
+
+/* entering solid from another material: carry over the colour the mark already
+   reads as, so stepped hands over its accent and not its lightest band */
+export function toSolid() { state.solid = signatureColour(); }
 
 export function holoStops() {
   const H = state.holo, out = [];

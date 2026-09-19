@@ -18,7 +18,7 @@ export function buildFill() {
   const box = div("fillbox");
 
   if (state.mode === "solid") {
-    box.appendChild(colorRow("colour", state.stops[0].c, v => { state.stops[0].c = v; state.preset = null; render(); paintPresets(); }));
+    box.appendChild(colorRow("colour", state.solid, v => { state.solid = v; state.preset = null; render(); paintPresets(); }));
   }
   if (state.mode === "stepped") box.appendChild(bandEditor(hooks));
   if (state.mode === "linear")  box.appendChild(stopBar(hooks));

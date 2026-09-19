@@ -10,6 +10,7 @@ export const state = {
     { c: "#539e65", p: .5789 }, { c: "#2b5037", p: .7368 },
   ],
   accent: "#82fb9c",          /* stepped mode: the one colour the five bands are built from */
+  solid: "#82fb9c",           /* solid mode: its own colour, so the ramp is never clobbered */
   sel: 0,
   angle: 90,
   snap: true,
