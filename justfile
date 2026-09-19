@@ -9,21 +9,21 @@ install:
     pnpm install
 
 # run the dev server (home, /logo/, /icon/, /type/)
-dev: install
+dev:
     pnpm vite
 
 # lint and format-check everything, the way CI would
-check: install
+check:
     pnpm oxlint
     pnpm oxfmt --check
 
 # rewrite files to the house format and fix what oxlint can fix
-fix: install
+fix:
     pnpm oxfmt
     pnpm oxlint --fix
 
 # bundle every page into dist/
-build: install
+build:
     pnpm vite build
 
 # serve the built site
