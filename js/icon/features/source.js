@@ -1,7 +1,7 @@
 /* Loading a source: file, paste, drag and drop, sample. */
 import { $ } from "../../shared/dom.js";
 import { SAMPLE, SAMPLE_NAME, SAMPLE_VB } from "../data/sample.js";
-import { effectiveMode, readImage, rebuild } from "../core/coverage.js";
+import { readImage, rebuild } from "../core/coverage.js";
 import { isEmpty } from "../core/grid.js";
 import { prepareSVG } from "../features/svgSanitise.js";
 import { refreshHint } from "../features/set.js";
@@ -17,9 +17,17 @@ $("iconName").addEventListener("input", () => {
   nameEdited = true;
 });
 
+/* The panel stays quiet while a source loads cleanly, and speaks up when
+   something is wrong or the source has been dropped. */
+function notice(msg) {
+  const el = $("srcName");
+  el.textContent = msg;
+  el.hidden = !msg;
+}
+
 /* Say what went wrong. "couldn't read that file" helps nobody. */
 export function fail(msg) {
-  $("srcName").textContent = msg;
+  notice(msg);
   toast(msg.length > 46 ? "see the source panel" : msg);
 }
 
@@ -94,7 +102,7 @@ export async function loadRemote(url) {
       .filter(Boolean)
       .pop() || "icon"
   ).replace(/\.[^.]+$/, "");
-  $("srcName").textContent = "fetching " + name + "…";
+  notice("fetching " + name + "…");
   if (/\.svg(\?|#|$)/i.test(url)) {
     try {
       const r = await fetch(url, { mode: "cors" });
@@ -135,8 +143,6 @@ export function useImageURL(url, name) {
       state.srcName = name || "image";
       state.edits.clear();
       state.undo.length = 0;
-      $("btnUndo").disabled = true;
-      $("btnDrop").disabled = false;
       if (!nameEdited) $("iconName").value = slug(state.srcName);
       rebuild(true);
       refreshHint();
@@ -146,15 +152,7 @@ export function useImageURL(url, name) {
             " loaded but nothing crossed the threshold — try another ink source or a lower threshold",
         );
       } else {
-        $("srcName").textContent =
-          state.srcName +
-          " · " +
-          img.width +
-          "×" +
-          img.height +
-          (state.img.hasAlpha ? " · has transparency" : " · opaque") +
-          " · reading " +
-          effectiveMode(state.img);
+        notice("");
       }
       if (url.startsWith("blob:")) URL.revokeObjectURL(url);
       res();
@@ -194,22 +192,6 @@ $("btnSample").onclick = () => {
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SAMPLE_VB} ${SAMPLE_VB}"><g fill="#000">${SAMPLE}</g></svg>`,
     SAMPLE_NAME,
   );
-};
-$("btnDrop").onclick = () => {
-  state.img = null;
-  state.cov = null;
-  state.srcName = "";
-  $("srcName").textContent =
-    "source dropped — the pixels stay, edit them by hand";
-  $("btnDrop").disabled = true;
-  const keep = Uint8Array.from(
-    state.grid || new Uint8Array(state.N * state.N),
-  );
-  state.edits.clear();
-  for (let i = 0; i < keep.length; i++)
-    if (keep[i]) state.edits.set(i, 1);
-  rebuild(false);
-  refreshHint();
 };
 
 /* drag, drop, paste */

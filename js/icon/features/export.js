@@ -1,10 +1,24 @@
 /* Saving: svg, png, ascii, sprite sheet. */
 import { $ } from "../../shared/dom.js";
+import { seg } from "../../shared/widgets.js";
 import { asciiBlock, asciiBraille, pathData, rects, svgSource } from "../core/trace.js";
 import { showDialog } from "../ui/dialog.js";
 import { slug } from "../../shared/util.js";
 import { state } from "../core/state.js";
 import { toast } from "../../shared/toast.js";
+
+const PNG_SIZES = [128, 256, 512, 1024];
+
+export function setPngSize(n) {
+  state.pngSize = n;
+  seg(
+    $("pngSeg"),
+    PNG_SIZES.map((v) => ({ id: v, label: String(v) })),
+    n,
+    setPngSize,
+  );
+}
+setPngSize(state.pngSize);
 
 function download(blob, name) {
   const url = URL.createObjectURL(blob);
@@ -35,25 +49,28 @@ $("btnSvg").onclick = () => {
 $("btnPng").onclick = () => {
   const name = slug($("iconName").value);
   const N = state.N,
-    scale = 1024 / N;
+    size = state.pngSize,
+    scale = size / N;
   const c = document.createElement("canvas");
-  c.width = 1024;
-  c.height = 1024;
+  c.width = size;
+  c.height = size;
   const x = c.getContext("2d");
   if (state.bgOn) {
     x.fillStyle = state.bg;
-    x.fillRect(0, 0, 1024, 1024);
+    x.fillRect(0, 0, size, size);
   }
   x.fillStyle = state.fg;
+  /* snap every edge to a whole pixel so cells stay crisp at any size */
+  const at = (i) => Math.round(i * scale);
   for (const [gx, gy, w, h] of rects(state.grid, N))
-    x.fillRect(gx * scale, gy * scale, w * scale, h * scale);
+    x.fillRect(at(gx), at(gy), at(gx + w) - at(gx), at(gy + h) - at(gy));
   c.toBlob((b) => {
     if (!b) {
       toast("png export failed");
       return;
     }
-    download(b, `${name}-1024.png`);
-    toast("saved " + name + "-1024.png");
+    download(b, `${name}-${size}.png`);
+    toast("saved " + name + "-" + size + ".png");
   }, "image/png");
 };
 $("btnAscii").onclick = () => {

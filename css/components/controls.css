@@ -2,6 +2,7 @@
 .sec{border:none}
 .sec>h2{
   margin:0;font-size:12px;font-weight:400;color:var(--dim);
+  text-transform:uppercase;letter-spacing:.05em;
   padding:9px 14px 0;display:flex;align-items:center;gap:8px;
 }
 .sec>h2::after{content:"";flex:1;height:1px;background:var(--line)}
@@ -13,12 +14,12 @@
 .lbl{color:var(--dim);font-size:12px}
 
 .seg{display:flex;border:1px solid var(--line);width:100%}
-.seg button{flex:1;padding:6px 4px;text-align:center;color:var(--dim);border-right:1px solid var(--line);white-space:nowrap;font-size:12px}
+.seg button{flex:1;min-height:var(--control-h);padding:4px;text-align:center;color:var(--dim);border-right:1px solid var(--line);white-space:nowrap;font-size:12px}
 .seg button:last-child{border-right:none}
 .seg button:hover{color:var(--ink);background:var(--panel2)}
 .seg button[aria-pressed="true"]{background:var(--hot);color:var(--hot-ink)}
 
-.field{display:flex;align-items:center;gap:10px;min-height:24px}
+.field{display:flex;align-items:center;gap:10px;min-height:var(--control-h)}
 .field>label{color:var(--dim);width:86px;flex:none;font-size:12px}
 .field .val{color:var(--ink2);width:46px;text-align:right;flex:none;font-variant-numeric:tabular-nums;font-size:12px}
 
@@ -37,14 +38,14 @@ input[type=range].swatch::-moz-range-track{height:10px;background:var(--track,va
 input[type=range].swatch::-webkit-slider-thumb{height:16px;margin-top:-4px;box-shadow:0 0 0 1px var(--hot-ink)}
 input[type=range].swatch::-moz-range-thumb{height:16px;box-shadow:0 0 0 1px var(--hot-ink)}
 
-input[type=color]{-webkit-appearance:none;appearance:none;width:26px;height:22px;padding:0;border:1px solid var(--line2);background:none;cursor:pointer;flex:none}
+input[type=color]{-webkit-appearance:none;appearance:none;width:var(--control-h);height:var(--control-h);padding:0;border:1px solid var(--line2);background:none;cursor:pointer;flex:none}
 input[type=color]::-webkit-color-swatch-wrapper{padding:1px}
 input[type=color]::-webkit-color-swatch{border:none}
 input[type=color]::-moz-color-swatch{border:none}
 .cwrap{display:flex;gap:6px;flex:1;min-width:0}
 
 input[type=text],input[type=number],select{
-  background:var(--bg);border:1px solid var(--line);padding:4px 6px;min-width:0;width:100%;
+  background:var(--bg);border:1px solid var(--line);height:var(--control-h);padding:4px 6px;min-width:0;width:100%;
 }
 input[type=text]:focus,input[type=number]:focus,select:focus{border-color:var(--line2);outline:none}
 select{cursor:pointer}
@@ -59,7 +60,7 @@ select{cursor:pointer}
 .check:has(input:disabled):hover{color:var(--dim)}
 .check input:disabled{cursor:not-allowed}
 
-.mini{border:1px solid var(--line);padding:4px 8px;color:var(--dim);font-size:12px;white-space:nowrap}
+.mini{border:1px solid var(--line);min-height:var(--control-h);padding:4px 8px;color:var(--dim);font-size:12px;white-space:nowrap}
 .mini:hover:not(:disabled){color:var(--ink);border-color:var(--line2);background:var(--panel2)}
 .mini:disabled{opacity:.35;cursor:not-allowed}
 

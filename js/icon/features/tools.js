@@ -1,6 +1,6 @@
-/* Board toolbar: grid, undo, invert, clear. */
+/* Board toolbar: grid, invert, clear. */
 import { $ } from "../../shared/dom.js";
-import { draw, pushUndo, undo } from "../render/board.js";
+import { draw, pushUndo } from "../render/board.js";
 import { refreshHint } from "../features/set.js";
 import { state } from "../core/state.js";
 
@@ -9,7 +9,6 @@ $("btnGrid").onclick = () => {
   $("btnGrid").setAttribute("aria-pressed", String(state.showGrid));
   draw();
 };
-$("btnUndo").onclick = undo;
 $("btnInvert").onclick = () => {
   pushUndo();
   for (let i = 0; i < state.grid.length; i++) {

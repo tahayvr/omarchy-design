@@ -102,14 +102,12 @@ export function pushUndo() {
     e: new Map(state.edits),
   });
   if (state.undo.length > 60) state.undo.shift();
-  $("btnUndo").disabled = false;
 }
 export function undo() {
   const s = state.undo.pop();
   if (!s) return;
   state.grid = s.g;
   state.edits = s.e;
-  $("btnUndo").disabled = state.undo.length === 0;
   draw();
   refreshHint();
 }

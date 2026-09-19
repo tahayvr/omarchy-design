@@ -38,7 +38,6 @@
             <button class="iconbtn" id="btnGrid" aria-pressed="true">
               grid
             </button>
-            <button class="iconbtn" id="btnUndo" disabled>undo</button>
             <button class="iconbtn" id="btnInvert">invert</button>
             <button class="iconbtn" id="btnClear">clear</button>
           </div>
@@ -71,9 +70,6 @@
                 nothing loaded — drop a file, paste an image or svg markup, or
                 draw by hand
               </div>
-              <button class="mini" id="btnDrop" disabled>
-                detach source and keep the pixels
-              </button>
               <input
                 type="file"
                 id="file"
@@ -124,6 +120,10 @@
             <button class="btn primary" id="btnAdd">add to set</button>
             <button class="btn" id="btnSvg">save .svg</button>
             <button class="btn" id="btnPng">save .png</button>
+          </div>
+          <div class="field">
+            <label>png size</label>
+            <div class="seg" id="pngSeg"></div>
           </div>
           <div class="row center">
             <input type="text" id="iconName" value="icon" spellcheck="false" />

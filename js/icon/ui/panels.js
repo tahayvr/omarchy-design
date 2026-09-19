@@ -156,23 +156,37 @@ export function pickSize(n) {
     had = state.grid;
   state.N = n;
   state.undo.length = 0;
-  $("btnUndo").disabled = true;
-  state.edits.clear(); // an edit at 24 means nothing at 48
-  if (state.img) {
-    rebuildAfterResize();
-  } else {
+  /* an edit at 24 covers four cells at 48, so carry it rather than drop it */
+  const carried = resampleEdits(state.edits, old, n);
+  state.edits.clear();
+  carried.forEach((v, i) => state.edits.set(i, v));
+  /* with no source the pixels are the artwork, so the whole grid comes along */
+  if (!state.img) {
     const g = resample(had || new Uint8Array(old * old), old, n);
     for (let i = 0; i < g.length; i++) if (g[i]) state.edits.set(i, 1);
-    rebuildAfterResize();
   }
-  function rebuildAfterResize() {
-    paintSizeSeg();
-    layout();
-    rebuild(!!state.img);
-    buildShape();
-    refreshHint();
-  }
+  paintSizeSeg();
+  layout();
+  rebuild(!!state.img);
+  buildShape();
+  refreshHint();
 }
+
+/* the same nearest-neighbour mapping resample() uses, over a sparse overlay */
+function resampleEdits(edits, from, to) {
+  const out = new Map();
+  if (!edits.size) return out;
+  for (let y = 0; y < to; y++) {
+    const sy = Math.floor((y * from) / to);
+    for (let x = 0; x < to; x++) {
+      const sx = Math.floor((x * from) / to);
+      const v = edits.get(sy * from + sx);
+      if (v !== undefined) out.set(y * to + x, v);
+    }
+  }
+  return out;
+}
+
 /* nearest-neighbour so hand-drawn work survives a size change */
 export function resample(g, from, to) {
   const out = new Uint8Array(to * to);

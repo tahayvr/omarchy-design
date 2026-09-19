@@ -35,6 +35,8 @@
   --scrim:rgba(10,10,10,.62);
   --scrim2:rgba(10,10,10,.45);
 
+  --control-h:28px;               /* one height for segs, buttons and fields */
+
   /* bottom strip: stage toolbar + preset tiles on the left, export footer on the right */
   --stagebar-h:37px;
   --presets-h:96px;

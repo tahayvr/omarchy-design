@@ -22,6 +22,7 @@ export const state = {
   img: null,
   srcName: "",
   edits: new Map(), // index -> 0|1, survives parameter changes
+  pngSize: 256,
   set: [],
   undo: [],
 };

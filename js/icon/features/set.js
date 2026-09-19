@@ -69,7 +69,6 @@ export function loadFromSet(n) {
     if (it.grid[i]) state.edits.set(i, 1);
   $("iconName").value = it.name;
   $("srcName").textContent = "loaded " + it.name + " from the set";
-  $("btnDrop").disabled = true;
   paintSizeSeg();
   layout();
   rebuild(false);
