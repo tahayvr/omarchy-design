@@ -1,0 +1,88 @@
+.stagebar .tabs {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 0 6px;
+  margin-right: auto;
+}
+
+/* ---------- presets ---------- */
+.presets {
+  flex: none;
+  height: var(--presets-h);
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+}
+.tab {
+  color: var(--dim);
+  font-size: 12px;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+}
+.tab:hover {
+  color: var(--ink);
+}
+.tab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--hot);
+}
+.ptrack {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  width: 100%;
+} /* scrolls, but no visible bar */
+.ptrack::-webkit-scrollbar {
+  display: none;
+}
+.ptrack[hidden] {
+  display: none;
+}
+.pchip {
+  flex: none;
+  width: 104px;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  padding: 0;
+  transition: border-color 0.12s;
+}
+.pchip:hover {
+  border-color: var(--line2);
+}
+.pchip[aria-pressed="true"] {
+  border-color: var(--hot);
+}
+.pchip .thumb {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 9px;
+  overflow: hidden;
+}
+.pchip .thumb svg {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+.pchip .nm {
+  display: block;
+  border-top: 1px solid var(--line);
+  padding: 4px 6px;
+  font-size: 11px;
+  color: var(--dim);
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pchip[aria-pressed="true"] .nm {
+  color: var(--ink);
+}

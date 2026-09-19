@@ -1,0 +1,80 @@
+/* The icon set tray under the board. */
+
+.tray {
+  flex: none;
+  height: var(--presets-h);
+  box-sizing: border-box;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  padding: 10px 12px 13px;
+}
+.trayhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 2px 9px;
+}
+.trayhead span {
+  color: var(--dim);
+  font-size: 12px;
+}
+.trayhead .hint {
+  margin-left: auto;
+  color: var(--dim2);
+  font-size: 11px;
+}
+.track {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  min-height: 78px;
+  padding-bottom: 6px;
+}
+.slot {
+  flex: none;
+  width: 76px;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  position: relative;
+}
+.slot canvas {
+  display: block;
+  margin: 7px auto 4px;
+  image-rendering: pixelated;
+}
+.slot .nm {
+  display: block;
+  border-top: 1px solid var(--line);
+  padding: 3px 5px;
+  font-size: 10px;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  width: 100%;
+}
+.slot:hover {
+  border-color: var(--line2);
+}
+.slot .x {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px 5px;
+  color: var(--dim);
+  font-size: 11px;
+  background: rgba(13, 16, 14, 0.75);
+}
+.slot .x:hover {
+  color: var(--danger);
+}
+.empty {
+  color: var(--dim2);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding-left: 4px;
+}
+
+/* controls */

@@ -1,0 +1,23 @@
+.stage {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+}
+.stage svg {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  display: block;
+}
+.stage.transparent svg {
+  outline: 1px dashed var(--line2);
+  outline-offset: -1px;
+}
+.stage .error {
+  color: var(--dim);
+  font-size: 12px;
+  max-width: 40ch;
+  text-align: center;
+}

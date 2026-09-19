@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Omarchy Design — Pixel Foundry</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/icon.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="head">
+        <a class="home" href="../" title="Omarchy Design home">
+          <img
+            class="mark"
+            src="../assets/marks/omarchy-design-line.svg"
+            alt="omarchy design"
+          />
+        </a>
+        <h1>Pixel Foundry</h1>
+      </header>
+
+      <div class="left">
+        <div class="stagewrap" id="stagewrap">
+          <canvas id="board"></canvas>
+          <div class="drop"></div>
+        </div>
+
+        <div class="stagebar">
+          <div class="truesize" id="truesize"></div>
+          <div class="tools">
+            <button class="iconbtn" id="btnGrid" aria-pressed="true">
+              grid
+            </button>
+            <button class="iconbtn" id="btnUndo" disabled>undo</button>
+            <button class="iconbtn" id="btnInvert">invert</button>
+            <button class="iconbtn" id="btnClear">clear</button>
+          </div>
+        </div>
+
+        <div class="tray">
+          <div class="trayhead">
+            <span>icon set</span>
+            <span class="hint" id="trayHint"
+              >draw or import, then add to the set</span
+            >
+          </div>
+          <div class="track" id="track"></div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="controls">
+          <section class="sec">
+            <h2>source</h2>
+            <div class="body">
+              <div class="hrow">
+                <button class="mini grow1" id="btnLoad">
+                  load image or svg…
+                </button>
+                <button class="mini" id="btnPaste">paste code</button>
+                <button class="mini" id="btnSample">sample</button>
+              </div>
+              <div class="note" id="srcName">
+                nothing loaded — drop a file, paste an image or svg markup, or
+                draw by hand
+              </div>
+              <button class="mini" id="btnDrop" disabled>
+                detach source and keep the pixels
+              </button>
+              <input
+                type="file"
+                id="file"
+                accept=".svg,image/svg+xml,image/png,image/jpeg,image/gif,image/webp,image/*"
+                hidden
+              />
+            </div>
+          </section>
+
+          <section class="sec">
+            <h2>grid</h2>
+            <div class="body">
+              <div class="seg" id="sizeSeg"></div>
+              <div id="gridBody"></div>
+            </div>
+          </section>
+
+          <section class="sec">
+            <h2>ink</h2>
+            <div class="body" id="inkBody"></div>
+          </section>
+
+          <section class="sec">
+            <h2>shape</h2>
+            <div class="body" id="shapeBody"></div>
+          </section>
+
+          <section class="sec">
+            <h2>colour</h2>
+            <div class="body" id="colourBody"></div>
+          </section>
+        </div>
+
+        <div class="export">
+          <div class="row">
+            <button class="btn primary" id="btnAdd">add to set</button>
+            <button class="btn" id="btnSvg">save .svg</button>
+            <button class="btn" id="btnPng">save .png</button>
+          </div>
+          <div class="row center">
+            <input type="text" id="iconName" value="icon" spellcheck="false" />
+            <button class="mini" id="btnAscii">ascii</button>
+            <button class="mini" id="btnSheet">sheet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <dialog id="dlg">
+      <div class="dh">
+        <span id="dlgTitle">output</span>
+        <button class="mini" id="dlgCopy">copy</button>
+        <button class="mini" id="dlgClose">close</button>
+      </div>
+      <div class="db">
+        <textarea id="dlgText" spellcheck="false" readonly></textarea>
+        <div class="note" id="dlgNote"></div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module" src="../js/icon/main.js"></script>
+  </body>
+</html>

@@ -69,3 +69,15 @@ select{cursor:pointer}
 .iconbtn:disabled{opacity:.35;cursor:not-allowed}
 .iconbtn:disabled:hover{color:var(--dim);border-color:transparent}
 .iconbtn.play{min-width:76px;text-align:left}
+
+.hrow {
+  display: flex;
+  gap: 8px;
+}
+.grow1 {
+  flex: 1;
+}
+.note {
+  color: var(--dim2);
+  font-size: 11px;
+}

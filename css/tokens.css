@@ -40,6 +40,8 @@
   --presets-h:96px;
   --footer-h:calc(var(--stagebar-h) + var(--presets-h));
 
+  --danger:#ff8080;               /* destructive action, e.g. remove from the set */
+
   /* brand surface: the homepage ground and the logo page header share it */
   --brand-surface:#121212;
   --grain-opacity:.055;

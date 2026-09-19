@@ -1,0 +1,54 @@
+/* The pixel board, its drop target, and the true-size previews. */
+
+#board {
+  position: relative;
+  image-rendering: pixelated;
+  touch-action: none;
+  cursor: crosshair;
+  max-width: 100%;
+  max-height: 100%;
+}
+.drop {
+  position: absolute;
+  inset: 18px;
+  border: 1px dashed var(--hot);
+  display: none;
+  pointer-events: none;
+}
+.dragging .drop {
+  display: block;
+}
+
+.truesize {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+.tsu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.tsu canvas {
+  image-rendering: pixelated;
+  display: block;
+}
+.tsu span {
+  font-size: 10px;
+  color: var(--dim2);
+}
+.tools {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+}
+
+/* the export footer's name field shares its row with the two mini buttons */
+.export .row.center {
+  align-items: center;
+  gap: 10px;
+}
+.export #iconName {
+  flex: 1;
+}

@@ -1,0 +1,17 @@
+/* Pixel foundry. Order matters: tokens first, tool components last. */
+@import "tokens.css";
+@import "base.css";
+@import "shell.css";
+@import "components/controls.css";
+@import "components/export.css";
+@import "components/toast.css";
+@import "icon/board.css";
+@import "icon/tray.css";
+@import "icon/dialog.css";
+
+/* The board's toolbar carries true-size previews and the tray carries the set,
+   so both are taller than the logo tool's strip. The export footer follows. */
+:root {
+  --stagebar-h: 58px;
+  --presets-h: 132px;
+}

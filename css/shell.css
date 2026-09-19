@@ -1,0 +1,126 @@
+/* App shell shared by the tools: two columns, header over the stage,
+   full-height control column. */
+
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 372px;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.left {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--line);
+}
+.right {
+  grid-column: 2;
+  grid-row: 1/-1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--panel);
+}
+
+/* ---------- header ---------- */
+.head {
+  grid-column: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 16px;
+  background: var(--brand-surface);
+}
+.head::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: var(--grain);
+}
+.head > * {
+  position: relative;
+}
+.head .home {
+  display: block;
+  flex: none;
+  line-height: 0;
+}
+.mark {
+  display: block;
+  height: 18px;
+  width: auto;
+}
+.head h1 {
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ---------- stage ---------- */
+.stagewrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 34px;
+  overflow: hidden;
+  background: var(--neutral-900);
+}
+
+.stagebar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 10px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  height: var(--stagebar-h);
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    min-height: 100%;
+  }
+  .left {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .right {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .stagewrap {
+    padding: 20px;
+    height: 36vh;
+    min-height: 190px;
+    flex: none;
+  }
+  .right {
+    min-height: 0;
+  }
+  .controls {
+    overflow: visible;
+  }
+  body {
+    overflow-y: auto;
+  }
+  .stagebar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 6px 10px;
+  }
+}

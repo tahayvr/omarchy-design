@@ -1,0 +1,52 @@
+/* The output dialog: svg source, ascii, sprite sheet. */
+
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+dialog {
+  border: 1px solid var(--line2);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0;
+  max-width: min(560px, 92vw);
+}
+dialog::backdrop {
+  background: rgba(5, 8, 6, 0.7);
+}
+dialog .dh {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+}
+dialog .db {
+  padding: 14px;
+}
+textarea {
+  width: 100%;
+  height: 210px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 8px;
+  resize: vertical;
+  font-size: 11px;
+  line-height: 1.15;
+  white-space: pre;
+  overflow: auto;
+}
+
+@media (max-width: 900px) {
+
+dialog .dh #dlgCopy {
+  margin-left: auto;
+}
+dialog .dh #dlgClose {
+  margin-left: 8px;
+}
+dialog .db .note {
+  margin-top: 8px;
+}

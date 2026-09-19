@@ -1,0 +1,8 @@
+/* Omarchy's own icon, the sample the page opens with. Mirrors assets/marks/icon.svg. */
+
+export const SAMPLE = `<path d="M90 1226H705V1316H0V0H1316V1316H805V1226H1226V90H90V1226Z"/>
+<path d="M1136 1136H180V180H708.21V270H270V1046H1046V270H946.21V180H1136V1136Z"/>
+<rect x="605" y="1136" width="100" height="90"/>
+<rect x="608" y="90" width="100" height="90"/>
+<rect y="608" width="270" height="100"/>`;
+export const SAMPLE_VB = 1316;
