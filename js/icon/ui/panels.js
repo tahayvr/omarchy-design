@@ -1,4 +1,4 @@
-/* The control sections: grid, ink, shape, colour. */
+/* The control sections: grid, ink, shape, color. */
 import { $ } from "../../shared/dom.js";
 import { checkbox, colorRow, seg, slider } from "../../shared/widgets.js";
 import { draw, layout, pushUndo } from "../render/board.js";
@@ -105,8 +105,8 @@ export function initCustomize() {
   btn.onclick = () => show(panel.hidden);
 }
 
-export function buildColour() {
-  const b = $("colourBody");
+export function buildcolor() {
+  const b = $("colorBody");
   b.replaceChildren();
   b.appendChild(
     colorRow("icon", state.fg, (v) => {
@@ -118,7 +118,7 @@ export function buildColour() {
   b.appendChild(
     checkbox("background", state.bgOn, (v) => {
       state.bgOn = v;
-      buildColour();
+      buildcolor();
       draw();
       paintTray();
     }),

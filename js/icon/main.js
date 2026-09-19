@@ -1,7 +1,7 @@
 /* Entry point: build the panels, wire the features, load the sample. */
 import { $ } from "../shared/dom.js";
 import {
-  buildColour,
+  buildcolor,
   buildGridPanel,
   buildShape,
   initCustomize,
@@ -30,7 +30,7 @@ addEventListener("keydown", (e) => {
 
 buildGridPanel();
 buildShape();
-buildColour();
+buildcolor();
 paintSizeSeg();
 initCustomize();
 state.grid = new Uint8Array(state.N * state.N);

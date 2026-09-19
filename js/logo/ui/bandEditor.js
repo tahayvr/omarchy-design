@@ -39,7 +39,7 @@ export function bandEditor(hooks) {
     state.preset = null;
     bandsFromAccent(v);
     if (live) {
-      /* update swatches in place so the colour picker keeps focus */
+      /* update swatches in place so the color picker keeps focus */
       bandColors().forEach((c, i) => {
         swatches[i].dataset.hex = c;
         swatches[i].title = "copy " + c;

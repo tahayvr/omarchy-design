@@ -91,6 +91,6 @@ $("btnSheet").onclick = () => {
   showDialog(
     "sprite sheet · " + state.set.length + " icons",
     sheet,
-    'paste into the page, then <svg><use href="#oma-name"/></svg> — colour comes from fill',
+    'paste into the page, then <svg><use href="#oma-name"/></svg> — color comes from fill',
   );
 };

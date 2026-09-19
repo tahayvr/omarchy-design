@@ -12,7 +12,7 @@ export function rampStops() {
 
 /* The stepped material is a brand rule, not a free-form ramp: five bands,
    always vertical, light at the top, in exactly 4·3·4·3·5 proportion as
-   measured off the reference wordmark. Colours are editable; the
+   measured off the reference wordmark. colors are editable; the
    proportions and direction are not. */
 export const BAND_RATIO = Object.freeze([4, 3, 4, 3, 5]);
 export const BAND_TOTAL = BAND_RATIO.reduce((a, b) => a + b, 0);
@@ -86,16 +86,16 @@ export function bandsFromAccent(accent) {
   state.sel = 0;
 }
 
-/* The fill's signature colour: the accent band, the solid colour, the
+/* The fill's signature color: the accent band, the solid color, the
    ramp's midpoint, or the holo base hue. */
-export function signatureColour() {
+export function signaturecolor() {
   if (state.mode === "stepped") return bandColors()[2];
   if (state.mode === "solid") return state.solid;
   if (state.mode === "holo") return hslToHex(state.holo.hue, state.holo.sat, state.holo.light);
   return sampleRamp(sortedStops(), 0.5);
 }
 
-/* entering stepped mode from another material: take the colour the current
+/* entering stepped mode from another material: take the color the current
    fill has at the middle band and build the bands from it */
 export function toBands() {
   const O = bandOffsets(),
@@ -105,10 +105,10 @@ export function toBands() {
   bandsFromAccent(accent);
 }
 
-/* entering solid from another material: carry over the colour the mark already
+/* entering solid from another material: carry over the color the mark already
    reads as, so stepped hands over its accent and not its lightest band */
 export function toSolid() {
-  state.solid = signatureColour();
+  state.solid = signaturecolor();
 }
 
 export function holoStops() {

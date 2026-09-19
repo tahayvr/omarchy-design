@@ -1,5 +1,5 @@
 /* Design tokens. The UI chrome uses Tailwind's Neutral palette so it never
-   competes with the colours being designed on the stage. */
+   competes with the colors being designed on the stage. */
 :root {
   /* tailwind neutral scale */
   --neutral-50: #fafafa;

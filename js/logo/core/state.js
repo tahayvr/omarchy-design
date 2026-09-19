@@ -1,19 +1,27 @@
 export const defaultFx = () => ({ scan: 0 });
-export const defaultBg = () => ({ mode: "none", c1: "#0d100e", c2: "#1b2a20", angle: 90 });
+export const defaultBg = () => ({
+  mode: "none",
+  c1: "#0d100e",
+  c2: "#1b2a20",
+  angle: 90,
+});
 
 export const state = {
   asset: "wordmark",
   preset: null,
   mode: "stepped",
   stops: [
-    /* colour stops; in stepped mode the first five are the bands */ { c: "#d0fdd9", p: 0 },
+    /* color stops; in stepped mode the first five are the bands */ {
+      c: "#d0fdd9",
+      p: 0,
+    },
     { c: "#a8fcba", p: 0.2632 },
     { c: "#82fb9c", p: 0.3684 },
     { c: "#539e65", p: 0.5789 },
     { c: "#2b5037", p: 0.7368 },
   ],
-  accent: "#82fb9c" /* stepped mode: the one colour the five bands are built from */,
-  solid: "#82fb9c" /* solid mode: its own colour, so the ramp is never clobbered */,
+  accent: "#82fb9c" /* stepped mode: the one color the five bands are built from */,
+  solid: "#82fb9c" /* solid mode: its own color, so the ramp is never clobbered */,
   sel: 0,
   angle: 90,
   snap: true,
@@ -21,7 +29,10 @@ export const state = {
   fx: defaultFx(),
   bg: defaultBg(),
   pad: 0,
-  tagline: { on: false, c: "#ddf7ff" } /* the omarchy.org hero line under the wordmark */,
+  tagline: {
+    on: false,
+    c: "#ddf7ff",
+  } /* the omarchy.org hero line under the wordmark */,
   aspect: "auto" /* shape id, see data/shapes.js */,
   anim: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   phase: 0,

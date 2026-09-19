@@ -100,14 +100,14 @@ export const STYLES = [
   },
 ];
 
-/* The reference wordmark's exact five band colours (hackerman theme). */
+/* The reference wordmark's exact five band colors (hackerman theme). */
 export const REFERENCE_BANDS = ["#d0fdd9", "#a8fcba", "#82fb9c", "#539e65", "#2b5037"];
 
 /* Every omarchy theme (accent + background from each theme's colors.toml in
    github.com/omacom/omarchy, branch quattro). Each accent is run through the
    ladder so every theme reads light-to-dark the same way the reference
-   wordmark does. Hackerman uses the reference colours verbatim. `text` is the
-   theme's text colour on omarchy.org, which the site sets its tagline in. */
+   wordmark does. Hackerman uses the reference colors verbatim. `text` is the
+   theme's text color on omarchy.org, which the site sets its tagline in. */
 const THEME_ACCENTS = [
   {
     id: "hackerman",

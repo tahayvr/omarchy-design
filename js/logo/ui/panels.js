@@ -19,7 +19,7 @@ export function buildFill() {
 
   if (state.mode === "solid") {
     box.appendChild(
-      colorRow("colour", state.solid, (v) => {
+      colorRow("color", state.solid, (v) => {
         state.solid = v;
         state.preset = null;
         render();
@@ -201,7 +201,7 @@ export function buildTagline() {
   b.appendChild(c);
   if (state.tagline.on && fits)
     b.appendChild(
-      colorRow("colour", state.tagline.c, (v) => {
+      colorRow("color", state.tagline.c, (v) => {
         state.tagline.c = v;
         render();
       }),
@@ -229,7 +229,7 @@ export function buildCanvas() {
   b.appendChild(bgSeg);
   if (state.bg.mode !== "none")
     b.appendChild(
-      colorRow("colour", state.bg.c1, (v) => {
+      colorRow("color", state.bg.c1, (v) => {
         state.bg.c1 = v;
         render();
       }),

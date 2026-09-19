@@ -22,7 +22,7 @@ export function applyPreset(p) {
   if (p.holo) state.holo = Object.assign({}, state.holo, p.holo);
   state.fx = p.fx ? Object.assign({}, p.fx) : defaultFx();
   state.bg = p.bg ? Object.assign({}, p.bg) : defaultBg();
-  state.tagline.c = p.text || "#ffffff"; /* themes carry omarchy.org's text colour */
+  state.tagline.c = p.text || "#eaeaea";
   state.sel = 0;
   seg($("modeSeg"), MODES, state.mode, pickMode);
   buildFill();

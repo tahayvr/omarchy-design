@@ -14,8 +14,8 @@ dev:
 
 # lint and format-check everything, the way CI would
 check:
+    pnpm oxfmt
     pnpm oxlint
-    pnpm oxfmt --check
 
 # rewrite files to the house format and fix what oxlint can fix
 fix:

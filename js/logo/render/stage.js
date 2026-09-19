@@ -3,7 +3,7 @@ import { frame } from "../core/geometry.js";
 import { buildSVG, el } from "../core/svg.js";
 import { shapeById } from "../data/shapes.js";
 import { mix } from "../../shared/color.js";
-import { signatureColour } from "../core/gradients.js";
+import { signaturecolor } from "../core/gradients.js";
 import { $ } from "../../shared/dom.js";
 
 let liveSVG = null;
@@ -25,9 +25,9 @@ export function render() {
   fit();
 }
 
-/* What the photo sits on: the canvas colour, or the stage behind a
+/* What the photo sits on: the canvas color, or the stage behind a
    transparent canvas. */
-function baseColour() {
+function basecolor() {
   const bg = state.bg;
   if (bg.mode === "solid") return bg.c1;
   if (bg.mode === "gradient") return mix(bg.c1, bg.c2, 0.5);
@@ -48,13 +48,20 @@ function avatarGuide() {
   const cx = f.x + av.cx * k,
     cy = f.y + av.cy * k;
   /* themed: the ring in the accent, the photo a tint of the canvas toward it */
-  const accent = signatureColour(),
-    base = baseColour();
+  const accent = signaturecolor(),
+    base = basecolor();
   const face = mix(base, accent, 0.14),
     figure = mix(base, accent, 0.4);
   const g = el("g", { "pointer-events": "none" });
   g.appendChild(
-    el("circle", { cx, cy, r: r - ring / 2, fill: face, stroke: accent, "stroke-width": ring }),
+    el("circle", {
+      cx,
+      cy,
+      r: r - ring / 2,
+      fill: face,
+      stroke: accent,
+      "stroke-width": ring,
+    }),
   );
   /* head and shoulders, kept inside the ring */
   g.appendChild(el("circle", { cx, cy: cy - r * 0.2, r: r * 0.3, fill: figure }));
