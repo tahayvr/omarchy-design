@@ -1,4 +1,6 @@
 # Omarchy Design — the site is plain HTML, CSS and ES modules; Vite only serves and bundles it.
+alias d := dev
+alias c := check
 
 default: dev
 
