@@ -10,18 +10,10 @@ export function buildGridPanel() {
   const b = $("gridBody");
   b.replaceChildren();
   b.appendChild(
-    slider(
-      "safe margin",
-      state.margin,
-      0,
-      4,
-      1,
-      String,
-      (v) => {
-        state.margin = v;
-        rebuild(true);
-      },
-    ),
+    slider("safe margin", state.margin, 0, 4, 1, String, (v) => {
+      state.margin = v;
+      rebuild(true);
+    }),
   );
   b.appendChild(
     checkbox("scale artwork to fill the grid", state.fit, (v) => {

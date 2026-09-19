@@ -1,8 +1,45 @@
-.export{flex:none;height:var(--footer-h);box-sizing:border-box;border-top:1px solid var(--line);padding:0 20px;background:var(--panel2);display:flex;flex-direction:column;justify-content:center;gap:14px}
-.export .row{display:flex;gap:8px}
-.btn{flex:1;border:1px solid var(--line2);padding:8px;text-align:center;color:var(--ink);white-space:nowrap}
-.btn:hover{background:var(--panel2);border-color:var(--line3)}
-.btn.primary{background:var(--hot);border-color:var(--hot);color:var(--hot-ink);font-weight:500}
-.btn.primary:hover{background:var(--hot-hover);border-color:var(--hot-hover)}
-.btn.fit{flex:0 0 auto;padding-inline:14px}
-.export .seg button{padding-inline:0}   /* room for a seventh, native width */
+.export {
+  flex: none;
+  height: var(--footer-h);
+  box-sizing: border-box;
+  border-top: 1px solid var(--line);
+  padding: 0 20px;
+  background: var(--panel2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+.export .row {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  flex: 1;
+  border: 1px solid var(--line2);
+  padding: 8px;
+  text-align: center;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.btn:hover {
+  background: var(--panel2);
+  border-color: var(--line3);
+}
+.btn.primary {
+  background: var(--hot);
+  border-color: var(--hot);
+  color: var(--hot-ink);
+  font-weight: 500;
+}
+.btn.primary:hover {
+  background: var(--hot-hover);
+  border-color: var(--hot-hover);
+}
+.btn.fit {
+  flex: 0 0 auto;
+  padding-inline: 14px;
+}
+.export .seg button {
+  padding-inline: 0;
+} /* room for a seventh, native width */

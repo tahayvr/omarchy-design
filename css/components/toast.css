@@ -1,6 +1,20 @@
-.toast{
-  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(6px);
-  background:var(--hot);color:var(--hot-ink);padding:7px 14px;font-size:12px;
-  opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:50;
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%) translateY(6px);
+  background: var(--hot);
+  color: var(--hot-ink);
+  padding: 7px 14px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.18s,
+    transform 0.18s;
+  z-index: 50;
 }
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

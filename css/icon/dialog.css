@@ -39,8 +39,6 @@ textarea {
   overflow: auto;
 }
 
-@media (max-width: 900px) {
-
 dialog .dh #dlgCopy {
   margin-left: auto;
 }

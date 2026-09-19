@@ -101,13 +101,7 @@ export const STYLES = [
 ];
 
 /* The reference wordmark's exact five band colours (hackerman theme). */
-export const REFERENCE_BANDS = [
-  "#d0fdd9",
-  "#a8fcba",
-  "#82fb9c",
-  "#539e65",
-  "#2b5037",
-];
+export const REFERENCE_BANDS = ["#d0fdd9", "#a8fcba", "#82fb9c", "#539e65", "#2b5037"];
 
 /* Every omarchy theme (accent + background from each theme's colors.toml in
    github.com/omacom/omarchy, branch quattro). Each accent is run through the

@@ -38,10 +38,10 @@ export async function loadFile(file) {
   try {
     /* Anything that isn't clearly a raster gets read as text and searched for
  an <svg>. Catches .txt, .html, no-extension downloads and wrong MIME types. */
-    if (namedSvg || /svg/i.test(type) || !/^image\//.test(type)) {
+    if (namedSvg || /svg/i.test(type) || !type.startsWith("image/")) {
       const text = await file.text();
       if (/<svg[\s>]/i.test(text)) return loadSVGText(text, base);
-      if (!/^image\//.test(type)) {
+      if (!type.startsWith("image/")) {
         return fail(
           "no <svg> tag inside " +
             file.name +
@@ -51,12 +51,7 @@ export async function loadFile(file) {
     }
     await useImageURL(URL.createObjectURL(file), base);
   } catch (err) {
-    fail(
-      "couldn't read " +
-        file.name +
-        ": " +
-        ((err && err.message) || "unknown error"),
-    );
+    fail("couldn't read " + file.name + ": " + ((err && err.message) || "unknown error"));
   }
 }
 
@@ -71,9 +66,7 @@ export function loadSVGText(text, name) {
     name,
   ).catch((err) =>
     failWithMarkup(
-      "the browser refused to draw it (" +
-        ((err && err.message) || "no reason given") +
-        ")",
+      "the browser refused to draw it (" + ((err && err.message) || "no reason given") + ")",
     ),
   );
 }
@@ -96,12 +89,7 @@ export function failWithMarkup(why) {
 }
 
 export async function loadRemote(url) {
-  const name = (
-    url
-      .split(/[\/?#]/)
-      .filter(Boolean)
-      .pop() || "icon"
-  ).replace(/\.[^.]+$/, "");
+  const name = (url.split(/[/?#]/).findLast(Boolean) || "icon").replace(/\.[^.]+$/, "");
   notice("fetching " + name + "…");
   if (/\.svg(\?|#|$)/i.test(url)) {
     try {
@@ -118,10 +106,8 @@ export async function loadRemote(url) {
   }
   try {
     await useImageURL(url, name);
-  } catch (e) {
-    fail(
-      "couldn't use that url — download the file and load it from disk",
-    );
+  } catch {
+    fail("couldn't use that url — download the file and load it from disk");
   }
 }
 
@@ -132,12 +118,8 @@ export function useImageURL(url, name) {
     img.onload = () => {
       try {
         state.img = readImage(img);
-      } catch (err) {
-        rej(
-          new Error(
-            "that image is cross-origin, so its pixels can't be read",
-          ),
-        );
+      } catch {
+        rej(new Error("that image is cross-origin, so its pixels can't be read"));
         return;
       }
       state.srcName = name || "image";
@@ -157,8 +139,7 @@ export function useImageURL(url, name) {
       if (url.startsWith("blob:")) URL.revokeObjectURL(url);
       res();
     };
-    img.onerror = () =>
-      rej(new Error("the browser refused to decode it"));
+    img.onerror = () => rej(new Error("the browser refused to decode it"));
     img.src = url;
   });
 }
@@ -215,16 +196,11 @@ document.addEventListener("drop", (e) => {
   if (f) return loadFile(f);
   /* dragged straight out of a browser tab: no file, just markup or a url */
   const html = dt.getData("text/html") || "";
-  const txt = (
-    dt.getData("text/plain") ||
-    dt.getData("text/uri-list") ||
-    ""
-  ).trim();
+  const txt = (dt.getData("text/plain") || dt.getData("text/uri-list") || "").trim();
   if (/<svg[\s>]/i.test(html)) return loadSVGText(html, "dropped");
   if (/<svg[\s>]/i.test(txt)) return loadSVGText(txt, "dropped");
   const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  const url =
-    (m && m[1]) || (/^https?:\/\//i.test(txt) ? txt.split(/\s+/)[0] : "");
+  const url = (m && m[1]) || (/^https?:\/\//i.test(txt) ? txt.split(/\s+/)[0] : "");
   if (url) return loadRemote(url);
   fail("nothing usable in that drop — save the file first, then load it");
 });

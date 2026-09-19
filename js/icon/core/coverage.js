@@ -27,16 +27,11 @@ export function inkAt(f, i, mode) {
   const a = f.d[i + 3] / 255;
   if (a === 0) return 0;
   if (mode === "alpha") return a;
-  const l =
-    (0.2126 * f.d[i] + 0.7152 * f.d[i + 1] + 0.0722 * f.d[i + 2]) / 255;
+  const l = (0.2126 * f.d[i] + 0.7152 * f.d[i + 1] + 0.0722 * f.d[i + 2]) / 255;
   return (mode === "light" ? l : 1 - l) * a;
 }
 export function effectiveMode(f) {
-  return state.source === "auto"
-    ? f.hasAlpha
-      ? "alpha"
-      : "dark"
-    : state.source;
+  return state.source === "auto" ? (f.hasAlpha ? "alpha" : "dark") : state.source;
 }
 /* average ink per cell; kept separate from the threshold so the slider is live */
 export function coverage() {
@@ -99,16 +94,14 @@ export function rebuild(recompute) {
   if (recompute) state.cov = coverage();
   let g = new Uint8Array(N * N);
   if (state.cov) {
-    for (let i = 0; i < N * N; i++)
-      g[i] = state.cov[i] >= state.threshold ? 1 : 0;
+    for (let i = 0; i < N * N; i++) g[i] = state.cov[i] >= state.threshold ? 1 : 0;
     if (state.invert) for (let i = 0; i < N * N; i++) g[i] = g[i] ? 0 : 1;
     if (state.despeckle) g = despeckle(g, N);
     if (state.fillholes) g = fillHoles(g, N);
   }
   state.base = g;
   let out = Uint8Array.from(g);
-  if (state.style === "outline" && !isEmpty(out))
-    out = outline(out, N, state.thick);
+  if (state.style === "outline" && !isEmpty(out)) out = outline(out, N, state.thick);
   state.edits.forEach((v, i) => {
     if (i < out.length) out[i] = v;
   });

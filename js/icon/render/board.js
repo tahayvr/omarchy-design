@@ -147,7 +147,6 @@ export function drawTrueSize() {
     x.fillStyle = state.fg;
     const k = s / N;
     if (state.grid)
-      for (const [gx, gy, w, h] of rects(state.grid, N))
-        x.fillRect(gx * k, gy * k, w * k, h * k);
+      for (const [gx, gy, w, h] of rects(state.grid, N)) x.fillRect(gx * k, gy * k, w * k, h * k);
   });
 }

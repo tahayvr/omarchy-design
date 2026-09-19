@@ -1,20 +1,75 @@
-.bands{display:flex;gap:4px}
-.band{flex:1;min-width:0;height:36px;border:1px solid transparent;transition:transform .08s}
-.band:hover{border-color:var(--ink)}
-.band:active{transform:scale(.95)}
-
-.gbar{position:relative;height:30px;border:1px solid var(--line2);margin-top:3px;touch-action:none;cursor:copy}
-.gbar .gfill{position:absolute;inset:0}
-.stop{
-  position:absolute;top:-4px;width:11px;height:38px;margin-left:-6px;cursor:grab;
-  border:1px solid var(--hot-ink);box-shadow:0 0 0 1px var(--line2);
+.bands {
+  display: flex;
+  gap: 4px;
 }
-.stop.sel{box-shadow:0 0 0 1px var(--hot),0 0 0 2px var(--hot-ring);z-index:3}
-.stop:active{cursor:grabbing}
+.band {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: 1px solid transparent;
+  transition: transform 0.08s;
+}
+.band:hover {
+  border-color: var(--ink);
+}
+.band:active {
+  transform: scale(0.95);
+}
 
-.stopmeta{display:flex;align-items:center;gap:8px;margin-top:9px}
-.stopmeta .grow{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
-.stopmeta .hex{width:88px}
-.stopmeta .hex.wide{width:100px}
-.stopmeta .pos{width:66px}
-.stopmeta .unit{color:var(--dim)}
+.gbar {
+  position: relative;
+  height: 30px;
+  border: 1px solid var(--line2);
+  margin-top: 3px;
+  touch-action: none;
+  cursor: copy;
+}
+.gbar .gfill {
+  position: absolute;
+  inset: 0;
+}
+.stop {
+  position: absolute;
+  top: -4px;
+  width: 11px;
+  height: 38px;
+  margin-left: -6px;
+  cursor: grab;
+  border: 1px solid var(--hot-ink);
+  box-shadow: 0 0 0 1px var(--line2);
+}
+.stop.sel {
+  box-shadow:
+    0 0 0 1px var(--hot),
+    0 0 0 2px var(--hot-ring);
+  z-index: 3;
+}
+.stop:active {
+  cursor: grabbing;
+}
+
+.stopmeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
+}
+.stopmeta .grow {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stopmeta .hex {
+  width: 88px;
+}
+.stopmeta .hex.wide {
+  width: 100px;
+}
+.stopmeta .pos {
+  width: 66px;
+}
+.stopmeta .unit {
+  color: var(--dim);
+}

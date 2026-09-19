@@ -1,4 +1,4 @@
-export const $ = id => document.getElementById(id);
+export const $ = (id) => document.getElementById(id);
 
 export function div(className, text) {
   const d = document.createElement("div");

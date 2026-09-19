@@ -53,10 +53,7 @@ export function escAttr(v) {
     .replace(/"/g, "&quot;");
 }
 export function escText(v) {
-  return String(v)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 export function emitNode(node, out) {
   const name = node.localName;
@@ -66,16 +63,14 @@ export function emitNode(node, out) {
     return;
   }
   if (name === "image") {
-    const href =
-      node.getAttribute("href") || node.getAttribute("xlink:href") || "";
+    const href = node.getAttribute("href") || node.getAttribute("xlink:href") || "";
     if (!/^data:/i.test(href)) return; // external images never load here
   }
   let s = "<" + name;
   for (const a of Array.from(node.attributes)) {
     let n = a.name;
     if (n === "xmlns" || n.toLowerCase().startsWith("xmlns:")) continue;
-    if (n.toLowerCase() === "xlink:href")
-      n = "href"; // svg2 spelling, no prefix needed
+    if (n.toLowerCase() === "xlink:href") n = "href"; // svg2 spelling, no prefix needed
     else if (n.includes(":") && !/^xml:/i.test(n)) continue;
     s += " " + n + '="' + escAttr(a.value) + '"';
   }
@@ -106,7 +101,7 @@ export function prepareSVG(text) {
           ? d.documentElement
           : d.querySelector("svg");
     }
-  } catch (e) {}
+  } catch {}
 
   /* Strict XML rejects unclosed tags and html entities, so fall back to the
      lenient html parser. A saved web page holds many svgs; take the biggest. */
@@ -117,10 +112,9 @@ export function prepareSVG(text) {
       if (all.length) {
         all.sort((a, b) => b.innerHTML.length - a.innerHTML.length);
         root = all[0];
-        if (all.length > 1)
-          note = "found " + all.length + " svgs, took the largest";
+        if (all.length > 1) note = "found " + all.length + " svgs, took the largest";
       }
-    } catch (e) {}
+    } catch {}
   }
   if (!root)
     return {
@@ -138,11 +132,7 @@ export function prepareSVG(text) {
         .split(/[\s,]+/)
         .map(Number)
     : [];
-  const hasVB =
-    nums.length === 4 &&
-    nums.every((n) => isFinite(n)) &&
-    nums[2] > 0 &&
-    nums[3] > 0;
+  const hasVB = nums.length === 4 && nums.every((n) => isFinite(n)) && nums[2] > 0 && nums[3] > 0;
   let w = parseFloat(root.getAttribute("width")),
     h = parseFloat(root.getAttribute("height"));
   if (hasVB) {
@@ -190,17 +180,14 @@ export function prepareSVG(text) {
     const check = new DOMParser().parseFromString(svg, "image/svg+xml");
     const pe = check.querySelector("parsererror");
     if (pe) {
-      const first = (pe.textContent || "")
-        .trim()
-        .replace(/\s+/g, " ")
-        .slice(0, 140);
+      const first = (pe.textContent || "").trim().replace(/\s+/g, " ").slice(0, 140);
       return {
         ok: false,
         why: "the rebuilt svg won't parse: " + first,
         svg,
       };
     }
-  } catch (e) {}
+  } catch {}
 
   /* "<line" is a prefix of "<linearGradient", so match the tag boundary */
   if (!GEOMETRY.some((g) => new RegExp("<" + g + "[\\s/>]").test(svg))) {

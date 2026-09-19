@@ -34,16 +34,8 @@ function download(blob, name) {
 }
 $("btnSvg").onclick = () => {
   const name = slug($("iconName").value);
-  const src = svgSource(
-    state.grid,
-    state.N,
-    state.fg,
-    state.bgOn ? state.bg : null,
-  );
-  download(
-    new Blob([src], { type: "image/svg+xml" }),
-    `${name}-${state.N}.svg`,
-  );
+  const src = svgSource(state.grid, state.N, state.fg, state.bgOn ? state.bg : null);
+  download(new Blob([src], { type: "image/svg+xml" }), `${name}-${state.N}.svg`);
   toast("saved " + name + "-" + state.N + ".svg");
 };
 $("btnPng").onclick = () => {
@@ -78,7 +70,7 @@ $("btnAscii").onclick = () => {
     braille = asciiBraille(state.grid, state.N);
   showDialog(
     "ascii",
-    block + "\n\n" + "— braille —\n\n" + braille,
+    block + "\n\n— braille —\n\n" + braille,
     "block art above, braille below. save either to ~/.config/omarchy/branding/screensaver.txt or about.txt",
   );
 };

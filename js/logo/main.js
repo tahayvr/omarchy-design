@@ -20,7 +20,8 @@ async function boot() {
     console.error(err);
     const msg = document.createElement("div");
     msg.className = "error";
-    msg.textContent = "couldn't load the marks from assets/marks/ — serve this folder over http (see README)";
+    msg.textContent =
+      "couldn't load the marks from assets/marks/ — serve this folder over http (see README)";
     $("stage").replaceChildren(msg);
     return;
   }
@@ -28,8 +29,13 @@ async function boot() {
   initPresetTracks(applyPreset);
   seg($("assetSeg"), ASSET_LIST, state.asset, pickAsset);
   seg($("modeSeg"), MODES, state.mode, pickMode);
-  buildFill(); buildFx(); buildCanvas(); buildTagline(); render(); paintPresets();
-  const style = STYLES.find(p => p.id === DEFAULT_STYLE);
+  buildFill();
+  buildFx();
+  buildCanvas();
+  buildTagline();
+  render();
+  paintPresets();
+  const style = STYLES.find((p) => p.id === DEFAULT_STYLE);
   if (style) applyPreset(style);
 
   initToolbar();

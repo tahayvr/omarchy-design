@@ -37,8 +37,7 @@ export function paintTray() {
     }
     x.fillStyle = state.fg;
     const k = px / it.N;
-    for (const [gx, gy, w, h] of rects(it.grid, it.N))
-      x.fillRect(gx * k, gy * k, w * k, h * k);
+    for (const [gx, gy, w, h] of rects(it.grid, it.N)) x.fillRect(gx * k, gy * k, w * k, h * k);
     const nm = document.createElement("button");
     nm.className = "nm";
     nm.textContent = it.name;
@@ -65,8 +64,7 @@ export function loadFromSet(n) {
   state.cov = null;
   state.grid = Uint8Array.from(it.grid);
   state.edits.clear();
-  for (let i = 0; i < it.grid.length; i++)
-    if (it.grid[i]) state.edits.set(i, 1);
+  for (let i = 0; i < it.grid.length; i++) if (it.grid[i]) state.edits.set(i, 1);
   $("iconName").value = it.name;
   $("srcName").textContent = "loaded " + it.name + " from the set";
   paintSizeSeg();

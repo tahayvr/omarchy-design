@@ -4,7 +4,6 @@ import { clamp } from "../../shared/util.js";
 import { snapOffset, snappable, axis, asset } from "../core/geometry.js";
 import { sortedStops } from "../core/gradients.js";
 import { div, span, button, input } from "../../shared/dom.js";
-import { caption } from "../../shared/widgets.js";
 
 function cssGradient() {
   const S = sortedStops();
@@ -125,8 +124,10 @@ export function stopBar(hooks) {
     } else hex.value = s.c;
   };
   pos.onchange = () => {
-    const s = selected(), cur = s.p;
-    const typed = parseFloat(pos.value), shown = parseFloat(pos.defaultValue);
+    const s = selected(),
+      cur = s.p;
+    const typed = parseFloat(pos.value),
+      shown = parseFloat(pos.defaultValue);
     const rows = axis(state.angle).len / asset().unit;
     const row = snappable() && rows >= 2 ? 1 / rows : 0;
     /* arrow keys and the spinner change the field by exactly 1; with snapping on that means one row */
@@ -165,7 +166,7 @@ export function stopBar(hooks) {
     button("mini", "reverse", () => {
       const cols = sortedStops()
         .map((x) => x.c)
-        .reverse();
+        .toReversed();
       sortedStops().forEach((st, i) => (st.c = cols[i]));
       state.preset = null;
       hooks.rebuild();

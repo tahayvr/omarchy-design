@@ -1,5 +1,4 @@
 /* Turning a grid into output: rectangles, svg path data, ascii. */
-import { $ } from "../../shared/dom.js";
 import { get, idx } from "../core/grid.js";
 
 /* greedy rectangle decomposition -> compact svg path */
@@ -14,17 +13,14 @@ export function rects(g, N) {
         continue;
       }
       let w = 0;
-      while (x + w < N && g[idx(x + w, y, N)] && !used[idx(x + w, y, N)])
-        w++;
+      while (x + w < N && g[idx(x + w, y, N)] && !used[idx(x + w, y, N)]) w++;
       let h = 1;
       grow: while (y + h < N) {
         for (let k = 0; k < w; k++)
-          if (!g[idx(x + k, y + h, N)] || used[idx(x + k, y + h, N)])
-            break grow;
+          if (!g[idx(x + k, y + h, N)] || used[idx(x + k, y + h, N)]) break grow;
         h++;
       }
-      for (let j = 0; j < h; j++)
-        for (let k = 0; k < w; k++) used[idx(x + k, y + j, N)] = 1;
+      for (let j = 0; j < h; j++) for (let k = 0; k < w; k++) used[idx(x + k, y + j, N)] = 1;
       out.push([x, y, w, h]);
       x += w;
     }
@@ -37,9 +33,7 @@ export function pathData(g, N) {
     .join("");
 }
 export function svgSource(g, N, fg, bg) {
-  const bgRect = bg
-    ? `<rect width="${N}" height="${N}" fill="${bg}"/>`
-    : "";
+  const bgRect = bg ? `<rect width="${N}" height="${N}" fill="${bg}"/>` : "";
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${N} ${N}" width="${N}" height="${N}" ` +
     `shape-rendering="crispEdges">${bgRect}<path d="${pathData(g, N)}" fill="${fg}"/></svg>`
@@ -67,8 +61,7 @@ export function asciiBraille(g, N) {
     for (let x = 0; x < N; x += 2) {
       let b = 0;
       for (let dx = 0; dx < 2; dx++)
-        for (let dy = 0; dy < 4; dy++)
-          if (get(g, x + dx, y + dy, N)) b |= DOT[dx][dy];
+        for (let dy = 0; dy < 4; dy++) if (get(g, x + dx, y + dy, N)) b |= DOT[dx][dy];
       s += String.fromCharCode(0x2800 + b);
     }
     L.push(s.replace(/\u2800+$/, ""));

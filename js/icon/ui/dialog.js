@@ -26,7 +26,7 @@ export async function copyDialog() {
   try {
     await navigator.clipboard.writeText(t.value);
     toast("copied");
-  } catch (e) {
+  } catch {
     t.removeAttribute("readonly");
     t.select();
     document.execCommand("copy");

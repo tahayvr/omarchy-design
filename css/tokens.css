@@ -1,53 +1,53 @@
 /* Design tokens. The UI chrome uses Tailwind's Neutral palette so it never
    competes with the colours being designed on the stage. */
-:root{
+:root {
   /* tailwind neutral scale */
-  --neutral-50:#fafafa;
-  --neutral-100:#f5f5f5;
-  --neutral-200:#e5e5e5;
-  --neutral-300:#d4d4d4;
-  --neutral-400:#a3a3a3;
-  --neutral-500:#737373;
-  --neutral-600:#525252;
-  --neutral-700:#404040;
-  --neutral-800:#262626;
-  --neutral-900:#171717;
-  --neutral-950:#0a0a0a;
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+  --neutral-950: #0a0a0a;
 
-  --bg:var(--neutral-950);
-  --panel:var(--neutral-900);
-  --panel2:var(--neutral-800);
+  --bg: var(--neutral-950);
+  --panel: var(--neutral-900);
+  --panel2: var(--neutral-800);
 
-  --line:var(--neutral-800);
-  --line2:var(--neutral-700);
-  --line3:var(--neutral-600);
+  --line: var(--neutral-800);
+  --line2: var(--neutral-700);
+  --line3: var(--neutral-600);
 
-  --ink:var(--neutral-200);
-  --ink2:var(--neutral-400);
-  --dim:var(--neutral-500);
-  --dim2:var(--neutral-600);
+  --ink: var(--neutral-200);
+  --ink2: var(--neutral-400);
+  --dim: var(--neutral-500);
+  --dim2: var(--neutral-600);
 
-  --hot:var(--neutral-200);
-  --hot-hover:var(--neutral-100);
-  --hot-ink:var(--neutral-950);
-  --hot-ring:rgba(229,229,229,.25);
+  --hot: var(--neutral-200);
+  --hot-hover: var(--neutral-100);
+  --hot-ink: var(--neutral-950);
+  --hot-ring: rgba(229, 229, 229, 0.25);
 
-  --scrim:rgba(10,10,10,.62);
-  --scrim2:rgba(10,10,10,.45);
+  --scrim: rgba(10, 10, 10, 0.62);
+  --scrim2: rgba(10, 10, 10, 0.45);
 
-  --control-h:28px;               /* one height for segs, buttons and fields */
+  --control-h: 28px; /* one height for segs, buttons and fields */
 
   /* bottom strip: stage toolbar + preset tiles on the left, export footer on the right */
-  --stagebar-h:37px;
-  --presets-h:96px;
-  --footer-h:calc(var(--stagebar-h) + var(--presets-h));
+  --stagebar-h: 37px;
+  --presets-h: 96px;
+  --footer-h: calc(var(--stagebar-h) + var(--presets-h));
 
-  --danger:#ff8080;               /* destructive action, e.g. remove from the set */
+  --danger: #ff8080; /* destructive action, e.g. remove from the set */
 
   /* brand surface: the homepage ground and the logo page header share it */
-  --brand-surface:#121212;
-  --grain-opacity:.055;
-  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --brand-surface: #121212;
+  --grain-opacity: 0.055;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }

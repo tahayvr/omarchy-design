@@ -41,8 +41,7 @@ export function despeckle(g, N) {
   const out = Uint8Array.from(g);
   for (let y = 0; y < N; y++)
     for (let x = 0; x < N; x++) {
-      if (g[idx(x, y, N)] && neighbours8(g, x, y, N) < 2)
-        out[idx(x, y, N)] = 0;
+      if (g[idx(x, y, N)] && neighbours8(g, x, y, N) < 2) out[idx(x, y, N)] = 0;
     }
   return out;
 }
@@ -51,8 +50,7 @@ export function fillHoles(g, N) {
   const out = Uint8Array.from(g);
   for (let y = 0; y < N; y++)
     for (let x = 0; x < N; x++) {
-      if (!g[idx(x, y, N)] && neighbours8(g, x, y, N) >= 7)
-        out[idx(x, y, N)] = 1;
+      if (!g[idx(x, y, N)] && neighbours8(g, x, y, N) >= 7) out[idx(x, y, N)] = 1;
     }
   return out;
 }

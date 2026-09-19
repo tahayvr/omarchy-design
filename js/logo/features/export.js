@@ -20,7 +20,7 @@ export function exportName(ext) {
 function pngWidths() {
   const native = shapeById(state.aspect).png;
   return native && !PNG_WIDTHS.includes(native)
-    ? [...PNG_WIDTHS, native].sort((a, b) => a - b)
+    ? [...PNG_WIDTHS, native].toSorted((a, b) => a - b)
     : PNG_WIDTHS;
 }
 
@@ -34,7 +34,12 @@ export function setPngWidth(w) {
   const widths = pngWidths();
   if (!widths.includes(w)) return;
   state.pngWidth = w;
-  seg($("pngSeg"), widths.map(v => ({ id: v, label: String(v) })), w, setPngWidth);
+  seg(
+    $("pngSeg"),
+    widths.map((v) => ({ id: v, label: String(v) })),
+    w,
+    setPngWidth,
+  );
 }
 
 export function serialize() {
@@ -49,8 +54,14 @@ export function serialize() {
 function download(blob, name) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = name; document.body.appendChild(a); a.click();
-  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 400);
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+    a.remove();
+  }, 400);
 }
 
 function saveSvg() {
@@ -60,12 +71,20 @@ function saveSvg() {
 
 async function copySvg() {
   const code = serialize();
-  try { await navigator.clipboard.writeText(code); toast("svg copied to clipboard"); }
-  catch (e) {
-    const ta = document.createElement("textarea"); ta.value = code; document.body.appendChild(ta);
+  try {
+    await navigator.clipboard.writeText(code);
+    toast("svg copied to clipboard");
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = code;
+    document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand("copy"); toast("svg copied to clipboard"); }
-    catch (_) { toast("couldn't reach the clipboard — save the file instead"); }
+    try {
+      document.execCommand("copy");
+      toast("svg copied to clipboard");
+    } catch {
+      toast("couldn't reach the clipboard — save the file instead");
+    }
     ta.remove();
   }
 }
@@ -73,16 +92,21 @@ async function copySvg() {
 function savePng() {
   const f = frame();
   const W = state.pngWidth;
-  const H = Math.round(W * f.h / f.w);
+  const H = Math.round((W * f.h) / f.w);
   const src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(serialize());
   const img = new Image();
   img.onload = () => {
-    const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    const cv = document.createElement("canvas");
+    cv.width = W;
+    cv.height = H;
     const ctx = cv.getContext("2d");
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(img, 0, 0, W, H);
-    cv.toBlob(b => {
-      if (!b) { toast("png export failed — save the svg instead"); return; }
+    cv.toBlob((b) => {
+      if (!b) {
+        toast("png export failed — save the svg instead");
+        return;
+      }
       download(b, exportName("png"));
       toast("saved " + exportName("png"));
     }, "image/png");

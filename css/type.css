@@ -151,8 +151,7 @@ body::before {
 }
 .mono {
   --col-left: calc(
-    var(--page-left) + (min(var(--max), 100vw) - 2 * var(--pad) - var(--gap)) /
-      2 + var(--gap)
+    var(--page-left) + (min(var(--max), 100vw) - 2 * var(--pad) - var(--gap)) / 2 + var(--gap)
   );
 }
 .specimen .weights {
