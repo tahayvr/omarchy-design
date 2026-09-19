@@ -5,3 +5,4 @@
 .btn.primary{background:var(--hot);border-color:var(--hot);color:var(--hot-ink);font-weight:500}
 .btn.primary:hover{background:var(--hot-hover);border-color:var(--hot-hover)}
 .btn.fit{flex:0 0 auto;padding-inline:14px}
+.export .seg button{padding-inline:0}   /* room for a seventh, native width */

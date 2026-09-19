@@ -21,5 +21,6 @@ export const state = {
   aspect: "auto",             /* shape id, see data/shapes.js */
   anim: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   phase: 0,
+  avatarGuide: true,          /* placeholder profile photo on banner shapes, drawn on the stage only */
   pngWidth: 1024,
 };

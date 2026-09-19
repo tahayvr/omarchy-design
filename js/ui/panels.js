@@ -7,8 +7,8 @@ import { seg, row, slider, colorRow, checkbox, setTrack } from "./widgets.js";
 import { stopBar } from "./stopBar.js";
 import { bandEditor } from "./bandEditor.js";
 import { paintPresets } from "./presetTracks.js";
-import { SHAPES, SOCIAL } from "../data/shapes.js";
-import { setPngWidth } from "../features/export.js";
+import { SHAPES, SOCIAL, shapeById } from "../data/shapes.js";
+import { setPngWidth, syncPngWidths } from "../features/export.js";
 
 const hooks = { rebuild: () => buildFill(), render, paintPresets };
 
@@ -86,7 +86,7 @@ export function buildCanvas() {
     const shape = items.find(s => s.id === id);
     state.aspect = id;
     if (shape.pad !== undefined) state.pad = shape.pad;
-    if (shape.png) setPngWidth(shape.png);
+    if (shape.png) setPngWidth(shape.png); else syncPngWidths();
     buildCanvas(); render();
   };
   const shapeRow = (label, items) => {
@@ -96,4 +96,9 @@ export function buildCanvas() {
   };
   b.appendChild(shapeRow("shape", SHAPES));
   SOCIAL.forEach(g => b.appendChild(shapeRow(g.group, g.items)));
+  if (shapeById(state.aspect).avatar) {
+    const c = checkbox("show profile photo", state.avatarGuide, v => { state.avatarGuide = v; render(); });
+    c.appendChild(span("cap", " (preview only, not exported)"));
+    b.appendChild(c);
+  }
 }
