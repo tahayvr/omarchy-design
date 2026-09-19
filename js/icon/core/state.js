@@ -2,16 +2,17 @@
 
 export const state = {
   N: 24,
-  margin: 1,
-  fit: true,
+  margin: 0,   /* an inset rescales the art off the grid */
+  fit: false,  /* map the source's own frame to the grid, 1:1 when it is drawn on one */
+  /* fixed: half a cell of ink lights it, and the ink mode is detected per source */
   threshold: 0.5,
-  source: "auto", // auto | alpha | dark | light
+  source: "auto",
   invert: false,
   style: "solid", // solid | outline
   thick: 1,
   despeckle: true,
   fillholes: true,
-  fg: "#82fb9c",
+  fg: "#a8cd76",   /* omarchy green */
   bg: "#0d100e",
   bgOn: false,
   showGrid: true,

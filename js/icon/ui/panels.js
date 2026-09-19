@@ -2,15 +2,13 @@
 import { $ } from "../../shared/dom.js";
 import { checkbox, colorRow, seg, slider } from "../../shared/widgets.js";
 import { draw, layout, pushUndo } from "../render/board.js";
-import { effectiveMode, rebuild } from "../core/coverage.js";
+import { rebuild } from "../core/coverage.js";
 import { paintTray, refreshHint } from "../features/set.js";
 import { state } from "../core/state.js";
 
 export function buildGridPanel() {
   const b = $("gridBody");
   b.replaceChildren();
-  b.style.cssText =
-    "display:flex;flex-direction:column;gap:10px;margin-top:10px";
   b.appendChild(
     slider(
       "safe margin",
@@ -18,7 +16,7 @@ export function buildGridPanel() {
       0,
       4,
       1,
-      (v) => v + (v === 1 ? " cell" : " cells"),
+      String,
       (v) => {
         state.margin = v;
         rebuild(true);
@@ -32,59 +30,15 @@ export function buildGridPanel() {
     }),
   );
 }
-export function buildInk() {
-  const b = $("inkBody");
+export function buildShape() {
+  const b = $("shapeBody");
   b.replaceChildren();
-  const s = document.createElement("div");
-  s.className = "seg";
-  seg(
-    s,
-    [
-      { id: "auto", label: "auto" },
-      { id: "alpha", label: "alpha" },
-      { id: "dark", label: "dark" },
-      { id: "light", label: "light" },
-    ],
-    state.source,
-    (id) => {
-      state.source = id;
-      buildInk();
-      rebuild(true);
-    },
-  );
-  b.appendChild(s);
-  b.appendChild(
-    slider(
-      "threshold",
-      state.threshold,
-      0.02,
-      0.98,
-      0.01,
-      (v) => Math.round(v * 100) + "",
-      (v) => {
-        state.threshold = v;
-        rebuild(false);
-      },
-    ),
-  );
   b.appendChild(
     checkbox("invert", state.invert, (v) => {
       state.invert = v;
       rebuild(false);
     }),
   );
-  const n = document.createElement("div");
-  n.className = "note";
-  n.textContent = state.img
-    ? "reading " +
-      effectiveMode(state.img) +
-      " — threshold is how much of a cell must be inked"
-    : "load something to use these";
-  b.appendChild(n);
-}
-export function buildShape() {
-  const b = $("shapeBody");
-  b.replaceChildren();
   const s = document.createElement("div");
   s.className = "seg";
   seg(
@@ -145,6 +99,20 @@ export function buildShape() {
   n.textContent = "hand edits stick when you change these";
   b.appendChild(n);
 }
+/* The defaults are meant to be right, so the granular controls stay folded
+   away until a particular icon needs dialling in. */
+export function initCustomize() {
+  const btn = $("btnCustomize"),
+    panel = $("advanced");
+  const show = (on) => {
+    panel.hidden = !on;
+    btn.setAttribute("aria-expanded", String(on));
+    btn.textContent = on ? "hide options" : "customize";
+  };
+  show(false);
+  btn.onclick = () => show(panel.hidden);
+}
+
 export function buildColour() {
   const b = $("colourBody");
   b.replaceChildren();

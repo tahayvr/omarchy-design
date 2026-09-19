@@ -1,6 +1,6 @@
 /* The icon set tray. */
 import { $ } from "../../shared/dom.js";
-import { buildInk, buildShape, paintSizeSeg } from "../ui/panels.js";
+import { buildShape, paintSizeSeg } from "../ui/panels.js";
 import { isEmpty } from "../core/grid.js";
 import { layout } from "../render/board.js";
 import { rebuild } from "../core/coverage.js";
@@ -73,7 +73,6 @@ export function loadFromSet(n) {
   paintSizeSeg();
   layout();
   rebuild(false);
-  buildInk();
   buildShape();
   refreshHint();
   toast("loaded " + it.name);

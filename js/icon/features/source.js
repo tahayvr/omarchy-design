@@ -1,7 +1,6 @@
 /* Loading a source: file, paste, drag and drop, sample. */
 import { $ } from "../../shared/dom.js";
-import { SAMPLE, SAMPLE_VB } from "../data/sample.js";
-import { buildInk } from "../ui/panels.js";
+import { SAMPLE, SAMPLE_NAME, SAMPLE_VB } from "../data/sample.js";
 import { effectiveMode, readImage, rebuild } from "../core/coverage.js";
 import { isEmpty } from "../core/grid.js";
 import { prepareSVG } from "../features/svgSanitise.js";
@@ -10,6 +9,13 @@ import { showDialog } from "../ui/dialog.js";
 import { slug } from "../../shared/util.js";
 import { state } from "../core/state.js";
 import { toast } from "../../shared/toast.js";
+
+/* The export name follows the source, so loading an icon and saving it keeps
+   its name. Once someone types their own, it is theirs. */
+let nameEdited = false;
+$("iconName").addEventListener("input", () => {
+  nameEdited = true;
+});
 
 /* Say what went wrong. "couldn't read that file" helps nobody. */
 export function fail(msg) {
@@ -131,10 +137,7 @@ export function useImageURL(url, name) {
       state.undo.length = 0;
       $("btnUndo").disabled = true;
       $("btnDrop").disabled = false;
-      const nm = $("iconName");
-      if (!nm.value || nm.value === "icon")
-        nm.value = slug(state.srcName);
-      buildInk();
+      if (!nameEdited) $("iconName").value = slug(state.srcName);
       rebuild(true);
       refreshHint();
       if (isEmpty(state.grid)) {
@@ -189,7 +192,7 @@ $("btnPaste").onclick = () => {
 $("btnSample").onclick = () => {
   loadSVGText(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${SAMPLE_VB} ${SAMPLE_VB}"><g fill="#000">${SAMPLE}</g></svg>`,
-    "omarchy",
+    SAMPLE_NAME,
   );
 };
 $("btnDrop").onclick = () => {
@@ -205,7 +208,6 @@ $("btnDrop").onclick = () => {
   state.edits.clear();
   for (let i = 0; i < keep.length; i++)
     if (keep[i]) state.edits.set(i, 1);
-  buildInk();
   rebuild(false);
   refreshHint();
 };

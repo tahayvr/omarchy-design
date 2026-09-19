@@ -1,6 +1,6 @@
 /* Entry point: build the panels, wire the features, load the sample. */
 import { $ } from "../shared/dom.js";
-import { buildColour, buildGridPanel, buildInk, buildShape, paintSizeSeg } from "./ui/panels.js";
+import { buildColour, buildGridPanel, buildShape, initCustomize, paintSizeSeg } from "./ui/panels.js";
 import { draw, layout, undo } from "./render/board.js";
 import { paintTray, refreshHint } from "./features/set.js";
 import { state } from "./core/state.js";
@@ -23,10 +23,10 @@ addEventListener("keydown", (e) => {
 });
 
 buildGridPanel();
-buildInk();
 buildShape();
 buildColour();
 paintSizeSeg();
+initCustomize();
 state.grid = new Uint8Array(state.N * state.N);
 layout();
 draw();
