@@ -1,14 +1,16 @@
-/* The color-role contract. Omarchy is themed by its users, so the system
-   never declares a color: it names the roles a theme fills, says what each
-   one paints, and sets the contrast a theme's pairs must reach. Every page,
-   tool and component speaks in these roles, never in hex.
+/* The color-role contract, in Omarchy's own terms: the keys of a theme's
+   colors.toml. Omarchy is themed by its users, so the system never declares
+   a color. It names the keys a theme fills, says what each one paints, and
+   sets the contrast a theme's pairs must reach.
 
-   DRAFT — the roles, names and thresholds are a starting point to correct. */
+   Keys, fallbacks and the terminal mapping follow bin/omarchy-theme-color
+   and default/themed/*.tpl in github.com/omacom/omarchy (branch quattro).
+   The thresholds are a draft. */
 
 export type Role = {
-  name: string;
+  key: string;
   paints: string;
-  /* where the value comes from when a theme leaves it out */
+  /* what Omarchy uses when a theme leaves the key out; none = required */
   fallback?: string;
 };
 
@@ -20,75 +22,128 @@ export type RoleGroup = {
 
 export const ROLE_GROUPS: RoleGroup[] = [
   {
-    title: "Base",
-    about: "The ground and what sits on it. Every theme fills these.",
+    title: "Ground",
+    about: "The surfaces everything sits on, from raised to recessed.",
     roles: [
-      { name: "background", paints: "Desktop, window and terminal backgrounds" },
-      { name: "foreground", paints: "Text and icons on the background" },
+      { key: "background", paints: "Windows, the terminal, the bar" },
       {
-        name: "muted",
-        paints: "Secondary text: hints, timestamps, inactive labels",
-        fallback: "color8",
-      },
-      {
-        name: "surface",
-        paints: "Raised areas: the bar, menus, notifications",
+        key: "lighter_background",
+        paints: "Raised surfaces: cards, popups, graph fills",
         fallback: "background",
       },
-      { name: "border", paints: "Inactive window borders and dividers", fallback: "color8" },
+      {
+        key: "dark_background",
+        paints: "Recessed areas: sidebars, inactive panes",
+        fallback: "background, 25% toward black",
+      },
+      {
+        key: "darker_background",
+        paints: "The deepest recesses: gutters, floating windows",
+        fallback: "background, 50% toward black",
+      },
+    ],
+  },
+  {
+    title: "Text",
+    about: "From loudest to quietest. Only the first three are for words people must read.",
+    roles: [
+      {
+        key: "bright_foreground",
+        paints: "Emphasis, bold text, and the cursor",
+        fallback: "foreground",
+      },
+      { key: "foreground", paints: "Body text, bar text, controls" },
+      {
+        key: "light_foreground",
+        paints: "Text a step quieter than foreground",
+        fallback: "foreground",
+      },
+      {
+        key: "dark_foreground",
+        paints: "Dim text: comments, line numbers, inactive tabs",
+        fallback: "foreground",
+      },
+      {
+        key: "muted",
+        paints: "The quietest: borders, hints, terminal bright black",
+        fallback: "dark_foreground",
+      },
     ],
   },
   {
     title: "Emphasis",
-    about: "Where the eye should go. The accent is the theme's signature.",
+    about:
+      "Where the eye should go. The accent is the theme's signature — and the middle band of the stepped logo.",
     roles: [
-      { name: "accent", paints: "Active window border, focus rings, the chosen item" },
-      {
-        name: "selection-background",
-        paints: "Selected text and the highlighted row in menus",
-        fallback: "accent",
-      },
-      { name: "selection-foreground", paints: "Text on a selection", fallback: "background" },
-      { name: "cursor", paints: "The terminal cursor", fallback: "foreground" },
+      { key: "accent", paints: "Active window border, focus, links, the stepped logo" },
+      { key: "selection", paints: "Selected text and highlighted rows", fallback: "background" },
+      { key: "selection_foreground", paints: "Text on a selection", fallback: "bright_foreground" },
     ],
   },
   {
-    title: "Status",
-    about: "Meaning, not decoration. Taken from the terminal colors unless a theme says otherwise.",
+    title: "Hues",
+    about:
+      "The terminal's colors, named rather than numbered. Each also carries a meaning in the interface.",
     roles: [
       {
-        name: "error",
-        paints: "Failures, destructive actions, urgent notifications",
-        fallback: "color1",
+        key: "red",
+        paints: "Errors, destructive actions, and anything in the bar asking for attention",
       },
-      { name: "warning", paints: "Low battery, pending changes, caution", fallback: "color3" },
-      { name: "success", paints: "Done, connected, charging", fallback: "color2" },
-      { name: "info", paints: "Neutral notices and links", fallback: "color4" },
+      { key: "yellow", paints: "Warnings and pending changes" },
+      { key: "green", paints: "Success: done, connected, charging" },
+      { key: "blue", paints: "Information and neutral notices" },
+      { key: "cyan", paints: "Terminal and editor syntax" },
+      { key: "magenta", paints: "Terminal and editor syntax" },
+      { key: "orange", paints: "Editor syntax", fallback: "yellow" },
+      { key: "brown", paints: "Editor syntax", fallback: "orange, 50% toward black" },
+      {
+        key: "bright_red … bright_magenta",
+        paints: "The bright terminal colors, one for each of the six above",
+        fallback: "the hue, 20% toward white",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    about: "Not colors a person reads, but they shape how the rest is used.",
+    roles: [
+      { key: "mode", paints: '"dark" or "light"', fallback: "worked out from background" },
+      {
+        key: "hyprland_active_border",
+        paints: "The active window border; may be a gradient",
+        fallback: "accent",
+      },
+      {
+        key: "hyprland_inactive_border",
+        paints: "Every other window border",
+        fallback: "a neutral grey",
+      },
     ],
   },
 ];
 
-/* The sixteen terminal colors, in their standard order. */
-export const TERMINAL = [
-  "black",
-  "red",
-  "green",
-  "yellow",
-  "blue",
-  "magenta",
-  "cyan",
-  "white",
-  "bright black",
-  "bright red",
-  "bright green",
-  "bright yellow",
-  "bright blue",
-  "bright magenta",
-  "bright cyan",
-  "bright white",
+/* The sixteen terminal colors, and the key each one takes. */
+export const TERMINAL: { n: number; name: string; key: string }[] = [
+  { n: 0, name: "black", key: "background" },
+  { n: 1, name: "red", key: "red" },
+  { n: 2, name: "green", key: "green" },
+  { n: 3, name: "yellow", key: "yellow" },
+  { n: 4, name: "blue", key: "blue" },
+  { n: 5, name: "magenta", key: "magenta" },
+  { n: 6, name: "cyan", key: "cyan" },
+  { n: 7, name: "white", key: "foreground" },
+  { n: 8, name: "bright black", key: "muted" },
+  { n: 9, name: "bright red", key: "bright_red" },
+  { n: 10, name: "bright green", key: "bright_green" },
+  { n: 11, name: "bright yellow", key: "bright_yellow" },
+  { n: 12, name: "bright blue", key: "bright_blue" },
+  { n: 13, name: "bright magenta", key: "bright_magenta" },
+  { n: 14, name: "bright cyan", key: "bright_cyan" },
+  { n: 15, name: "bright white", key: "bright_foreground" },
 ];
 
 export type Pair = {
+  id: string;
   fg: string;
   bg: string;
   min: number;
@@ -97,48 +152,68 @@ export type Pair = {
 };
 
 /* Contrast pairs, as WCAG 2 ratios. 4.5 is the bar for reading text,
-   3 for text that is large or secondary and for parts of the interface. */
+   3 for parts of the interface you need to find. */
 export const PAIRS: Pair[] = [
-  { fg: "foreground", bg: "background", min: 4.5, level: "must", why: "Body text" },
-  { fg: "foreground", bg: "surface", min: 4.5, level: "must", why: "Text in the bar and menus" },
+  { id: "text", fg: "foreground", bg: "background", min: 4.5, level: "must", why: "Body text" },
   {
-    fg: "selection-foreground",
-    bg: "selection-background",
+    id: "raised",
+    fg: "foreground",
+    bg: "lighter_background",
+    min: 4.5,
+    level: "must",
+    why: "Text on cards and popups",
+  },
+  {
+    id: "selection",
+    fg: "selection_foreground",
+    bg: "selection",
     min: 4.5,
     level: "must",
     why: "Selected text stays readable",
   },
   {
+    id: "accent",
     fg: "accent",
     bg: "background",
     min: 3,
     level: "must",
     why: "Focus and the active window are visible",
   },
-  { fg: "cursor", bg: "background", min: 3, level: "must", why: "You can find the cursor" },
-  { fg: "muted", bg: "background", min: 3, level: "must", why: "Hints are quiet, not invisible" },
-  { fg: "error", bg: "background", min: 3, level: "must", why: "Failures are never missed" },
   {
-    fg: "color1–6, 9–14",
+    id: "cursor",
+    fg: "bright_foreground",
+    bg: "background",
+    min: 3,
+    level: "must",
+    why: "You can find the cursor",
+  },
+  {
+    id: "hues",
+    fg: "red, yellow, green, blue, cyan, magenta",
     bg: "background",
     min: 3,
     level: "should",
-    why: "Colored terminal output reads",
+    why: "Colored output and status read",
   },
 ];
 
-/* The contract as CSS a theme fills in. */
-export function cssTemplate(): string {
-  const lines = [":root {"];
+export const HUES = ["red", "yellow", "green", "blue", "cyan", "magenta"];
+
+/* A colors.toml a new theme can start from: the required keys, then the
+   ones Omarchy can work out, commented. */
+export function tomlTemplate(): string {
+  const lines = ['mode = "dark"', ""];
   for (const g of ROLE_GROUPS) {
-    lines.push(`  /* ${g.title.toLowerCase()} */`);
+    if (g.title === "Settings") continue;
+    lines.push(`# ${g.title.toLowerCase()}`);
     for (const r of g.roles) {
-      const note = r.fallback ? ` /* or var(--omarchy-${r.fallback}) */` : "";
-      lines.push(`  --omarchy-${r.name}: ;${note}`);
+      if (r.key.includes("…")) {
+        for (const h of HUES) lines.push(`# bright_${h} = "#"  # ${r.fallback}`);
+        continue;
+      }
+      lines.push(r.fallback ? `# ${r.key} = "#"  # else ${r.fallback}` : `${r.key} = "#"`);
     }
+    lines.push("");
   }
-  lines.push("  /* terminal */");
-  TERMINAL.forEach((name, i) => lines.push(`  --omarchy-color${i}: ; /* ${name} */`));
-  lines.push("}");
-  return lines.join("\n");
+  return lines.join("\n").trimEnd();
 }

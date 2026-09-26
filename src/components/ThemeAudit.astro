@@ -1,0 +1,96 @@
+---
+/* Every theme Omarchy ships, checked against the contrast pairs at build
+   time. A ratio under its minimum is marked. */
+import { THEMES, PAIRS, check } from "../lib/themes";
+
+const rows = THEMES.map((t) => ({ t, cells: PAIRS.map((p) => Object.assign(check(t, p), { p })) }));
+const passes = (i: number) => rows.filter((r) => r.cells[i].pass).length;
+---
+
+<table class="audit">
+  <thead>
+    <tr>
+      <th>Theme</th>
+      {
+        PAIRS.map((p) => (
+          <th>
+            {p.id}
+            <span class="min">{p.min}:1</span>
+          </th>
+        ))
+      }
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((r) => (
+        <tr>
+          <td class="tn">
+            <span class="sw" style={`background:${r.t.colors.background}`}>
+              <span style={`background:${r.t.colors.accent}`} />
+            </span>
+            {r.t.id}
+          </td>
+          {r.cells.map((c) => (
+            <td class:list={["r", { miss: !c.pass }]} title={c.note ? `under ${c.p.min}:1 — ${c.note}` : undefined}>
+              {c.ratio.toFixed(1)}
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Pass</td>
+      {PAIRS.map((_, i) => <td class="r">{passes(i)}/{rows.length}</td>)}
+    </tr>
+  </tfoot>
+</table>
+
+<style>
+  .audit th {
+    white-space: nowrap;
+  }
+  .min {
+    display: block;
+    color: var(--dim2);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .tn {
+    white-space: nowrap;
+  }
+  /* the theme's ground with its accent in the middle */
+  .sw {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    vertical-align: -3px;
+    border: 1px solid var(--guide);
+  }
+  .sw span {
+    width: 6px;
+    height: 6px;
+  }
+  .r {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink2);
+  }
+  .r.miss {
+    color: #fff;
+    text-decoration: underline dotted var(--neutral-500);
+    text-underline-offset: 3px;
+  }
+  .r.miss::after {
+    content: " ✕";
+    color: var(--dim);
+  }
+  tfoot td {
+    color: #fff;
+    border-bottom: none;
+  }
+</style>

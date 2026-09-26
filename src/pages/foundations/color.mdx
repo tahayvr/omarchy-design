@@ -2,35 +2,49 @@
 layout: ../../layouts/Docs.astro
 title: Color roles
 status: draft
-description: Omarchy never declares a color. It names the roles a theme fills, says what each one paints, and sets the contrast the theme's pairs must reach. Design and build with the role, never the hex.
+description: Omarchy never declares a color. A theme's colors.toml fills a fixed set of keys, Omarchy turns them into every app's theme, and this page says what each key paints and the contrast its pairs must reach. Design and build with the key, never the hex.
 ---
 
 import RoleGroups from "../../components/RoleGroups.astro";
 import Pairs from "../../components/Pairs.astro";
-import { cssTemplate } from "../../data/roles";
+import ThemeAudit from "../../components/ThemeAudit.astro";
+import { tomlTemplate } from "../../data/roles";
+import { SUMMARY } from "../../lib/themes";
 
-## Why roles
+## Why keys
 
-Every Omarchy theme repaints the whole desktop, and anyone can write one. A bar, a menu or a logo that hard-codes `#a8cd76` looks right in one theme and wrong in the rest. Asking for `accent` instead lets the same design hold in every theme, including ones that don't exist yet.
+Every Omarchy theme is a `colors.toml`. When a theme is set, Omarchy fills a template for each app — the terminal, the bar, the window borders, the editor, btop and more — from the keys in that file. So a theme repaints the whole desktop, and anyone can write one.
 
-So the rule is short: **name the role, never the color.** If a role you need is missing, it belongs in this list, not in your file.
+A bar, a menu or a logo that hard-codes `#82fb9c` looks right in one theme and wrong in the rest. Asking for `accent` instead lets the same design hold in every theme, including ones that don't exist yet.
 
-## The roles
+So the rule is short: **name the key, never the color.** If a key you need is missing, it belongs in this list, not in your file.
+
+## The keys
 
 <RoleGroups />
 
+Two keys are worked out rather than set: the cursor is always `bright_foreground`, and `selection_background` is another name for `selection`.
+
 ## Contrast
 
-A theme can pick any colors it likes, as long as these pairs clear the bar. The ratios are [WCAG 2 contrast ratios](https://www.w3.org/TR/WCAG21/#contrast-minimum): 4.5:1 for text you read, 3:1 for secondary text and for parts of the interface you need to find.
+A theme can pick any colors it likes, as long as these pairs clear the bar. The ratios are [WCAG 2 contrast ratios](https://www.w3.org/TR/WCAG21/#contrast-minimum): 4.5:1 for text you read, 3:1 for parts of the interface you need to find.
 
 <Pairs />
 
 A theme that misses a **must** is broken for someone. A **should** is a strong default a theme can break on purpose — a low-contrast palette for a dim room, say — but should say so.
 
-## As CSS
+`muted` and `dark_foreground` have no minimum. They're for what you can do without: borders, comments, hints. Never let them carry something a person has to read.
 
-The contract as custom properties a theme fills in. A value left out falls back to the role named beside it.
+## Shipped themes
+
+Every theme Omarchy ships, checked against the pairs above when this site is built. Of {SUMMARY.themes}, {SUMMARY.missMust === 0 ? "every one meets every must" : `${SUMMARY.missMust} miss a must`}; {SUMMARY.missShould} put at least one hue under 3:1. Hover a marked cell to see which.
+
+<ThemeAudit />
+
+## Starting a theme
+
+The keys a new `colors.toml` needs, with the rest commented out. Leave a commented key out and Omarchy works it out from the others.
 
 <pre>
-  <code>{cssTemplate()}</code>
+  <code>{tomlTemplate()}</code>
 </pre>

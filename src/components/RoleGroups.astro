@@ -1,6 +1,6 @@
 ---
-/* The roles as empty slots: the system names a place for a color and says
-   what it paints, and the theme decides what goes in it. */
+/* The keys of colors.toml as empty slots: the system names a place for a
+   color and says what it paints, and the theme decides what goes in it. */
 import { ROLE_GROUPS, TERMINAL } from "../data/roles";
 ---
 
@@ -12,7 +12,7 @@ import { ROLE_GROUPS, TERMINAL } from "../data/roles";
       <table>
         <thead>
           <tr>
-            <th>Role</th>
+            <th>Key</th>
             <th>Paints</th>
             <th>If a theme leaves it out</th>
           </tr>
@@ -22,10 +22,10 @@ import { ROLE_GROUPS, TERMINAL } from "../data/roles";
             <tr>
               <td class="rname">
                 <span class="slot" aria-hidden="true" />
-                <code>{r.name}</code>
+                <code>{r.key}</code>
               </td>
               <td>{r.paints}</td>
-              <td class="fb">{r.fallback ? <code>{r.fallback}</code> : "required"}</td>
+              <td class:list={["fb", { req: !r.fallback }]}>{r.fallback ?? "required"}</td>
             </tr>
           ))}
         </tbody>
@@ -36,14 +36,17 @@ import { ROLE_GROUPS, TERMINAL } from "../data/roles";
 
 <section class="rgroup">
   <h3>Terminal</h3>
-  <p class="about">The sixteen colors every terminal theme already has. Numbered, not named for their hue, because a theme may put anything in them.</p>
+  <p class="about">
+    Terminals still count colors 0 to 15. Omarchy fills each from a key above, so a theme never sets
+    them directly.
+  </p>
   <ol class="term">
     {
-      TERMINAL.map((name, i) => (
+      TERMINAL.map((t) => (
         <li>
-          <span class="slot" aria-hidden="true" />
-          <code>color{i}</code>
-          <span class="tname">{name}</span>
+          <span class="n">color{t.n}</span>
+          <code>{t.key}</code>
+          <span class="tname">{t.name}</span>
         </li>
       ))
     }
@@ -71,7 +74,9 @@ import { ROLE_GROUPS, TERMINAL } from "../data/roles";
   }
   .fb {
     color: var(--dim);
-    white-space: nowrap;
+  }
+  .fb.req {
+    color: #fff;
   }
   .term {
     list-style: none;
@@ -79,8 +84,7 @@ import { ROLE_GROUPS, TERMINAL } from "../data/roles";
     margin: 0 0 24px;
     max-width: none !important;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     border-top: 1px solid var(--guide);
     font-size: 13px;
   }
@@ -89,10 +93,16 @@ import { ROLE_GROUPS, TERMINAL } from "../data/roles";
     padding: 9px 0;
     border-bottom: 1px solid var(--guide);
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .n {
+    width: 7ch;
+    color: var(--dim);
+    font-variant-numeric: tabular-nums;
   }
   .tname {
-    margin-left: 10px;
-    color: var(--dim);
+    color: var(--dim2);
+    font-size: 11px;
   }
 </style>

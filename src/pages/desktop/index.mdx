@@ -9,18 +9,18 @@ import Cards from "../../components/Cards.astro";
 
 ## The theme contract
 
-A theme is a set of values for the [color roles](../foundations/color/) plus the files that hand them to each app. These are the apps a theme covers today; the list is a draft to confirm.
+A theme is a [`colors.toml`](../foundations/color/). When it's set, Omarchy fills a template for each app from its keys, so one file repaints the whole desktop. A theme can also ship its own file for any app to replace the generated one.
 
-| App                       | What it draws                                                |
-| ------------------------- | ------------------------------------------------------------ |
-| Terminal                  | Text, the cursor, selections and the sixteen terminal colors |
-| Bar                       | Workspaces, the clock and status icons along the screen edge |
-| Launcher                  | The menu that finds apps, commands and files                 |
-| Notifications             | Messages in the corner, by urgency                           |
-| Lock screen               | The password field over the wallpaper                        |
-| On-screen display         | Volume and brightness while they change                      |
-| Window borders            | The active window and the rest                               |
-| Editor and system monitor | Terminal apps with their own themes                          |
+| Area                    | Apps themed from colors.toml                            |
+| ----------------------- | ------------------------------------------------------- |
+| Desktop shell           | The bar, lock screen, notifications, menus and controls |
+| Window manager          | Hyprland's window borders and the screen-share picker   |
+| Terminals               | Alacritty, Ghostty, Kitty, foot                         |
+| Editors                 | Neovim, Helix, VS Code, Obsidian                        |
+| System                  | btop, Chromium, the keyboard backlight                  |
+| Command line and agents | gum, Claude, Pi, Hermes, T3 Code                        |
+
+From the templates in Omarchy's `default/themed` folder.
 
 ## Coming next
 

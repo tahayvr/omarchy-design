@@ -37,3 +37,7 @@ preview: build
 # remove build output
 clean:
     rm -rf dist .astro
+
+# refresh the shipped themes' colors.toml the roles page audits (needs gh)
+themes ref="quattro":
+    ./scripts/fetch-themes.sh {{ref}}
