@@ -1,0 +1,46 @@
+---
+/* The stepped fill taken apart: five bands in 4·3·4·3·5 pixel rows, light
+   at the top, the accent in the middle. Drawn from bands.js. */
+import { MARKS, BAND_RATIO, REFERENCE_BANDS, bandOffsets } from "../../lib/brand";
+
+const m = MARKS.wordmark;
+const u = m.unit;
+const O = bandOffsets();
+const id = `bd${Math.random().toString(36).slice(2, 8)}`;
+const right = m.w + u * 3;
+const names = ["lightest", "light", "accent", "shade", "deepest"];
+---
+
+<svg class="bd" viewBox={`${-u * 2} ${-u * 2} ${m.w + u * 30} ${m.h + u * 4}`} role="img" aria-label="The five bands of the stepped fill">
+  <defs>
+    <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width={m.w} height={m.h}>
+      <g fill="#fff" set:html={m.content} />
+    </mask>
+  </defs>
+  <g mask={`url(#${id})`}>
+    {REFERENCE_BANDS.map((c, i) => <rect x="0" y={O[i] * m.h} width={m.w} height={(O[i + 1] - O[i]) * m.h} fill={c} />)}
+  </g>
+  <g stroke="var(--neutral-600)" stroke-dasharray="5 5">
+    {O.slice(1, -1).map((o) => <line x1={-u} y1={o * m.h} x2={right} y2={o * m.h} vector-effect="non-scaling-stroke" />)}
+  </g>
+  <g font-family="var(--mono)" font-size="26">
+    {
+      BAND_RATIO.map((r, i) => (
+        <>
+          <rect x={right + u} y={O[i] * m.h + 3} width={u * 1.2} height={(O[i + 1] - O[i]) * m.h - 6} fill={REFERENCE_BANDS[i]} />
+          <text x={right + u * 3} y={((O[i] + O[i + 1]) / 2) * m.h + 9} fill="var(--neutral-300)">
+            {r} rows · {names[i]}
+          </text>
+        </>
+      ))
+    }
+  </g>
+</svg>
+
+<style>
+  .bd {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

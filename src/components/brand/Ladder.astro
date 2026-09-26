@@ -1,0 +1,66 @@
+---
+/* Accent in, five bands out: the ladder the stepped fill is built from,
+   shown for a few Omarchy themes. */
+import { THEME_BANDS } from "../../lib/brand";
+
+interface Props {
+  ids?: string[];
+}
+const { ids = ["hackerman", "catppuccin", "gruvbox", "tokyo-night", "rose-pine", "everforest"] } = Astro.props;
+const picked = ids.map((id) => THEME_BANDS.find((t) => t.id === id)).filter((t) => !!t);
+const rows = picked.length ? picked : THEME_BANDS.slice(0, 6);
+---
+
+<table class="ladder">
+  <thead>
+    <tr>
+      <th>Theme</th>
+      <th>Lightest</th>
+      <th>Light</th>
+      <th>Accent</th>
+      <th>Shade</th>
+      <th>Deepest</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((t) => (
+        <tr>
+          <td>{t.name}</td>
+          {t.cols.map((c, i) => (
+            <td>
+              <span class:list={["sw", { acc: i === 2 }]} style={`background:${c}`} />
+              <code>{c}</code>
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .ladder td {
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .sw {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: -4px;
+    border: 1px solid var(--guide);
+  }
+  .sw.acc {
+    outline: 1px solid var(--neutral-300);
+    outline-offset: 2px;
+  }
+  .ladder code {
+    font-size: 11px;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--dim);
+  }
+</style>

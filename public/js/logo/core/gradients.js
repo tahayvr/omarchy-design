@@ -1,6 +1,10 @@
 import { state } from "./state.js";
 import { asset, snapOffset } from "./geometry.js";
-import { hslToHex, hexToHsl, mix } from "../../shared/color.js";
+import { hslToHex, mix } from "../../shared/color.js";
+import { BAND_RATIO, BAND_TOTAL, bandOffsets, ladder } from "./bands.js";
+
+/* the band rule lives in bands.js so the docs can render from it too */
+export { BAND_RATIO, BAND_TOTAL, bandOffsets, ladder } from "./bands.js";
 
 export function sortedStops() {
   return state.stops.toSorted((a, b) => a.p - b.p);
@@ -8,24 +12,6 @@ export function sortedStops() {
 
 export function rampStops() {
   return sortedStops().map((s) => ({ o: snapOffset(s.p), c: s.c }));
-}
-
-/* The stepped material is a brand rule, not a free-form ramp: five bands,
-   always vertical, light at the top, in exactly 4·3·4·3·5 proportion as
-   measured off the reference wordmark. colors are editable; the
-   proportions and direction are not. */
-export const BAND_RATIO = Object.freeze([4, 3, 4, 3, 5]);
-export const BAND_TOTAL = BAND_RATIO.reduce((a, b) => a + b, 0);
-
-export function bandOffsets() {
-  const o = [];
-  let acc = 0;
-  for (let i = 0; i < BAND_RATIO.length; i++) {
-    o.push(acc / BAND_TOTAL);
-    acc += BAND_RATIO[i];
-  }
-  o.push(1);
-  return o;
 }
 
 export function bandColors() {
@@ -38,21 +24,6 @@ export function bandRows() {
   const a = asset(),
     rows = a.h / a.unit;
   return BAND_RATIO.map((r) => (r / BAND_TOTAL) * rows);
-}
-
-/* Light-to-dark ladder around a theme accent. The proportions come from the
-   reference wordmark, whose middle band is the Hackerman theme accent. */
-export function ladder(accent) {
-  const { h, s, l } = hexToHsl(accent),
-    hi = 95,
-    lo = 8;
-  return [
-    hslToHex(h, s, l + (hi - l) * 0.78),
-    hslToHex(h, s, l + (hi - l) * 0.3),
-    hslToHex(h, s, l),
-    hslToHex(h + 2, s * 0.35, l - (l - lo) * 0.4),
-    hslToHex(h + 7, s * 0.33, l - (l - lo) * 0.76),
-  ];
 }
 
 export function sampleRamp(S, t) {

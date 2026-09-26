@@ -37,11 +37,11 @@ export const NAV: NavSection[] = [
     blurb: "How Omarchy looks and speaks.",
     items: [
       { title: "Overview", href: "/brand/" },
+      { title: "Logo", href: "/brand/logo/" },
+      { title: "Graphic elements", href: "/brand/graphic-elements/" },
+      { title: "Voice and tone", href: "/brand/voice/" },
+      { title: "Downloads", href: "/brand/downloads/" },
       { title: "Logo Foundry", href: "/logo/", tool: true },
-      { title: "Logo rules" },
-      { title: "Voice and tone" },
-      { title: "Graphic elements" },
-      { title: "Downloads" },
     ],
   },
   {

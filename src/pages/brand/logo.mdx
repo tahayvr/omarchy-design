@@ -1,0 +1,95 @@
+---
+layout: ../../layouts/Docs.astro
+title: Logo
+status: draft
+description: The wordmark, the icon and the lockup — how they're built, how much room they need, how small they go, and what never to do to them. Every drawing on this page is made from the master files.
+---
+
+import Mark from "../../components/Mark.astro";
+import Figure from "../../components/brand/Figure.astro";
+import GridDiagram from "../../components/brand/GridDiagram.astro";
+import LockupDiagram from "../../components/brand/LockupDiagram.astro";
+import ClearSpace from "../../components/brand/ClearSpace.astro";
+import MinSize from "../../components/brand/MinSize.astro";
+import ThemeWall from "../../components/brand/ThemeWall.astro";
+import Donts from "../../components/brand/Donts.astro";
+import { MARKS, REFERENCE_BANDS, GRID, MIN } from "../../lib/brand";
+
+## The marks
+
+Three marks, one family. Use the **wordmark** wherever there's room to say the name, the **icon** where there isn't — app icons, favicons, avatars — and the **lockup** when both should be seen together.
+
+<div class="marks">
+  <Figure caption="Wordmark">
+    <Mark mark={MARKS.wordmark} bands={REFERENCE_BANDS} />
+  </Figure>
+  <Figure caption="Icon">
+    <div class="icon-wrap">
+      <Mark mark={MARKS.icon} />
+    </div>
+  </Figure>
+  <Figure caption="Lockup">
+    <Mark mark={MARKS.lockup} />
+  </Figure>
+</div>
+
+## Construction
+
+The wordmark is drawn on a grid of {GRID.cols} by {GRID.rows} square pixels, and every edge sits on it. That grid is the brand's unit: clear space, the lockup gap and the [stepped bands](../graphic-elements/) are all counted in its pixels.
+
+<Figure caption="The wordmark on its pixel grid">
+  <GridDiagram />
+</Figure>
+
+## Lockup
+
+The icon is scaled to the body of the wordmark's "o", so the two share a centre line, and sits a quarter of its own height to the left. Don't build it by hand — take it from [Downloads](../downloads/) or the [Logo Foundry](../../logo/).
+
+<Figure caption="The icon spans the o; the gap is a quarter of the icon">
+  <LockupDiagram />
+</Figure>
+
+## Clear space
+
+Keep a quarter of the mark's height clear on every side, rounded up to whole pixels: {MIN.clear} pixels around the wordmark and the lockup. Nothing else — text, edges, other logos — enters it. More room is always fine.
+
+<div class="pair">
+  <Figure caption="Wordmark: 5 pixels">
+    <ClearSpace mark={MARKS.wordmark} />
+  </Figure>
+  <Figure caption="Icon: a quarter of its height">
+    <ClearSpace mark={MARKS.icon} />
+  </Figure>
+</div>
+
+## Minimum size
+
+On screens, give every grid pixel at least two screen pixels: the wordmark no narrower than {MIN.wordmark}px. At one screen pixel per grid pixel it still holds, but only just — that's the floor. The icon goes down to {MIN.icon}px, the size of a favicon.
+
+<Figure caption="Actual size" tone="panel">
+  <MinSize />
+</Figure>
+
+## Color
+
+The mark is one color or one stepped fill, never anything in between.
+
+- **Flat**, in the theme's `foreground` on its `background`. Use it at small sizes, in interfaces, and anywhere print has one ink.
+- **Stepped**, built from the theme's `accent` by the [band rule](../graphic-elements/#stepped-bands). Use it where the mark is the point of the page.
+
+Because the stepped fill comes from the accent, the same rule holds in every theme — including ones that don't exist yet.
+
+<ThemeWall />
+
+## Don't
+
+<Donts />
+
+<style>{`
+  .marks { display: grid; grid-template-columns: 1.4fr 0.7fr; gap: 0 16px; max-width: none !important; }
+  .marks > :last-child .stage { padding-inline: 12%; }
+  .marks > :last-child { grid-column: 1 / -1; }
+  .icon-wrap { width: min(120px, 60%); margin: 0 auto; }
+  .pair { display: grid; grid-template-columns: 1.5fr 1fr; gap: 0 16px; align-items: start; max-width: none !important; }
+  @media (max-width: 700px) { .marks, .pair { grid-template-columns: 1fr; } }
+`}</style>

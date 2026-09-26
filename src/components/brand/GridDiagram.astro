@@ -1,0 +1,40 @@
+---
+/* The wordmark on the pixel grid it was drawn on, with its size in pixels. */
+import { MARKS } from "../../lib/brand";
+
+const m = MARKS.wordmark;
+const u = m.unit;
+const cols = m.w / u,
+  rows = m.h / u;
+const pad = 4 * u;
+const vx = -pad,
+  vy = -pad * 1.4,
+  vw = m.w + pad * 2.6,
+  vh = m.h + pad * 2.6;
+const xs = Array.from({ length: cols + 1 }, (_, i) => i * u);
+const ys = Array.from({ length: rows + 1 }, (_, i) => i * u);
+---
+
+<svg class="grid" viewBox={`${vx} ${vy} ${vw} ${vh}`} role="img" aria-label={`The wordmark on a ${cols} by ${rows} pixel grid`}>
+  <g fill="var(--neutral-300)" set:html={m.content} />
+  <g stroke="var(--neutral-600)" stroke-width="1" vector-effect="non-scaling-stroke" opacity="0.55">
+    {xs.map((x) => <line x1={x} y1="0" x2={x} y2={m.h} vector-effect="non-scaling-stroke" />)}
+    {ys.map((y) => <line x1="0" y1={y} x2={m.w} y2={y} vector-effect="non-scaling-stroke" />)}
+  </g>
+  <g stroke="var(--neutral-500)" vector-effect="non-scaling-stroke" fill="none">
+    <path d={`M0 ${-u * 2.2}H${m.w}M0 ${-u * 2.8}V${-u * 1.6}M${m.w} ${-u * 2.8}V${-u * 1.6}`} vector-effect="non-scaling-stroke" />
+    <path d={`M${m.w + u * 2.2} 0V${m.h}M${m.w + u * 1.6} 0H${m.w + u * 2.8}M${m.w + u * 1.6} ${m.h}H${m.w + u * 2.8}`} vector-effect="non-scaling-stroke" />
+  </g>
+  <g fill="var(--neutral-400)" font-family="var(--mono)" font-size="30">
+    <text x={m.w / 2} y={-u * 3.4} text-anchor="middle">{cols} pixels</text>
+    <text x={m.w + u * 3.4} y={m.h / 2 + 10}>{rows}</text>
+  </g>
+</svg>
+
+<style>
+  .grid {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

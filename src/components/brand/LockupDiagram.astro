@@ -1,0 +1,40 @@
+---
+/* How the lockup is built: the icon spans the body of the wordmark's "o",
+   and sits a quarter of its own height away. Numbers from marks.js. */
+import { MARKS, LOCKUP } from "../../lib/brand";
+
+const m = MARKS.lockup;
+const { O_TOP, O_HEIGHT, GAP } = LOCKUP;
+const u = m.unit;
+const pad = 5 * u;
+const bottom = O_TOP + O_HEIGHT;
+---
+
+<svg class="lk" viewBox={`${-pad * 2.4} ${-pad} ${m.w + pad * 3.4} ${m.h + pad * 2.2}`} role="img" aria-label="Lockup construction">
+  <g fill="var(--neutral-300)" set:html={m.content} />
+  <g stroke="var(--neutral-500)" stroke-dasharray="6 6" fill="none">
+    <line x1={-u * 4} y1={O_TOP} x2={m.w + pad * 0.6} y2={O_TOP} vector-effect="non-scaling-stroke" />
+    <line x1={-u * 4} y1={bottom} x2={m.w + pad * 0.6} y2={bottom} vector-effect="non-scaling-stroke" />
+  </g>
+  <g fill="var(--neutral-500)" fill-opacity="0.35">
+    <rect x={O_HEIGHT} y={O_TOP} width={GAP} height={O_HEIGHT} />
+  </g>
+  <g stroke="var(--neutral-500)" fill="none">
+    <path d={`M${-u * 3} ${O_TOP}V${bottom}M${-u * 3.6} ${O_TOP}H${-u * 2.4}M${-u * 3.6} ${bottom}H${-u * 2.4}`} vector-effect="non-scaling-stroke" />
+    <path d={`M${O_HEIGHT} ${bottom + u * 2}H${O_HEIGHT + GAP}`} vector-effect="non-scaling-stroke" />
+  </g>
+  <g fill="var(--neutral-400)" font-family="var(--mono)" font-size="30">
+    <text x={-u * 5} y={(O_TOP + bottom) / 2 + 10} text-anchor="end">{O_HEIGHT / u} px</text>
+    <text x={O_HEIGHT + GAP / 2} y={bottom + u * 4.4} text-anchor="middle">{GAP / u} px</text>
+    <text x={m.w + pad * 0.6} y={O_TOP - 14} text-anchor="end">top of the "o"</text>
+    <text x={m.w + pad * 0.6} y={bottom + 40} text-anchor="end">baseline of the "o"</text>
+  </g>
+</svg>
+
+<style>
+  .lk {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

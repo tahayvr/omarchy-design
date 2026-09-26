@@ -1,0 +1,57 @@
+---
+/* The marks at real screen sizes, down to the smallest allowed. */
+import Mark from "../Mark.astro";
+import { MARKS, GRID, MIN } from "../../lib/brand";
+
+const w = MARKS.wordmark;
+const words = [GRID.cols * 3, MIN.wordmark, MIN.wordmarkFloor];
+const icons = [48, 24, MIN.icon];
+---
+
+<div class="sizes">
+  <div class="row">
+    {
+      words.map((px) => (
+        <div class="cell">
+          <Mark mark={w} style={`width:${px}px`} />
+          <span>
+            {px}px
+            {px === MIN.wordmarkFloor ? " — floor" : px === MIN.wordmark ? " — smallest for screens" : ""}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+  <div class="row">
+    {
+      icons.map((px) => (
+        <div class="cell">
+          <Mark mark={MARKS.icon} style={`width:${px}px`} />
+          <span>{px}px{px === MIN.icon ? " — floor" : ""}</span>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .sizes {
+    display: grid;
+    gap: 28px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 32px 40px;
+  }
+  .cell {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cell span {
+    font-size: 11px;
+    color: var(--dim);
+  }
+</style>

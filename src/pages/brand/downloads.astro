@@ -1,0 +1,117 @@
+---
+/* The master files: every mark in white, black and the stepped fill, one
+   at a time or all in a zip. Built from the same SVGs the site draws. */
+import Docs from "../../layouts/Docs.astro";
+import Mark from "../../components/Mark.astro";
+import { MARKS, REFERENCE_BANDS, brandFiles } from "../../lib/brand";
+import { url } from "../../data/nav";
+
+const files = brandFiles();
+const groups = Object.values(MARKS).map((m) => ({ mark: m, files: files.filter((f) => f.mark === m) }));
+const ground: Record<string, string> = { white: "var(--neutral-950)", black: "#f5f5f5", stepped: "var(--neutral-950)" };
+---
+
+<Docs
+  title="Downloads"
+  status="draft"
+  description="The master files for the wordmark, icon and lockup. For any other color, fill or size, make it in the Logo Foundry."
+  file="src/pages/brand/downloads.astro"
+  headings={groups.map((g) => ({ depth: 2, slug: g.mark.id, text: g.mark.label }))}
+>
+  <p>
+    <a class="all" href={url("/brand/omarchy-brand.zip")} download>Download everything (.zip)</a>
+  </p>
+  <p>
+    Before using them, read the <a href={url("/brand/logo/")}>logo rules</a>: clear space, minimum
+    size, and what not to do.
+  </p>
+
+  {
+    groups.map((g) => (
+      <>
+        <h2 id={g.mark.id}>{g.mark.label}</h2>
+        <ul class="files">
+          {g.files.map((f) => (
+            <li>
+              <a class="file" href={url(`/brand/files/${f.name}`)} download>
+                <span class="tile" style={`background:${ground[f.kind]}`}>
+                  <span class:list={["art", g.mark.id]}>
+                    <Mark
+                      mark={g.mark}
+                      fill={f.kind === "black" ? "#000" : "#fff"}
+                      bands={f.kind === "stepped" ? REFERENCE_BANDS : undefined}
+                    />
+                  </span>
+                </span>
+                <span class="meta">
+                  <span>{f.kind}</span>
+                  <span class="fmt">svg</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    ))
+  }
+</Docs>
+
+<style>
+  .all {
+    display: inline-block;
+    padding: 10px 16px;
+    background: var(--hot) !important;
+    color: var(--hot-ink) !important;
+    border: none !important;
+    font-weight: 500;
+  }
+  .all:hover {
+    background: var(--hot-hover) !important;
+  }
+  .files {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    max-width: none !important;
+  }
+  .files li {
+    margin: 0 !important;
+  }
+  .file {
+    display: block;
+    border: 1px solid var(--guide) !important;
+    text-decoration: none;
+  }
+  .file:hover {
+    border-color: var(--neutral-500) !important;
+  }
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+  }
+  .art {
+    display: block;
+    width: 62%;
+  }
+  .art.icon {
+    width: 28%;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-top: 1px solid var(--guide);
+    font-size: 12px;
+    color: var(--ink2);
+  }
+  .fmt {
+    color: var(--dim);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+</style>

@@ -14,6 +14,15 @@ export const ASSETS = {};
    loadMarks() as { w, h, content }. */
 export const TAGLINE = {};
 
+/* Lockup rule: the icon matches the body height of the wordmark's "o"
+   (y 15..255, 240 units) so both share the same vertical centre, and sits
+   one quarter of its height (60 units, 4 pixel rows) to the left. The docs
+   draw their lockup diagrams from these numbers too. */
+export const LOCKUP = Object.freeze({ O_TOP: 15, O_HEIGHT: 240, GAP: 60 });
+
+/* The pixel each mark is drawn on, in its own units. */
+export const UNITS = Object.freeze({ icon: 90, wordmark: 15 });
+
 async function fetchMark(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
@@ -38,22 +47,23 @@ export async function loadMarks() {
   ]);
   Object.assign(TAGLINE, line);
 
-  /* Lockup rule: the icon matches the body height of the wordmark's "o"
-     (y 15..255, 240 units) so both share the same vertical centre, and sits
-     one quarter of its height (60 units, 4 pixel rows) to the left. */
-  const O_TOP = 15,
-    O_HEIGHT = 240,
-    GAP = 60;
+  const { O_TOP, O_HEIGHT, GAP } = LOCKUP;
   const lockupIcon = (O_HEIGHT / icon.w).toFixed(6);
 
   Object.assign(ASSETS, {
-    icon: { label: "icon", w: icon.w, h: icon.h, unit: 90, content: icon.content },
-    wordmark: { label: "wordmark", w: word.w, h: word.h, unit: 15, content: word.content },
+    icon: { label: "icon", w: icon.w, h: icon.h, unit: UNITS.icon, content: icon.content },
+    wordmark: {
+      label: "wordmark",
+      w: word.w,
+      h: word.h,
+      unit: UNITS.wordmark,
+      content: word.content,
+    },
     lockup: {
       label: "lockup",
       w: O_HEIGHT + GAP + word.w,
       h: word.h,
-      unit: 15,
+      unit: UNITS.wordmark,
       content:
         `<g transform="translate(0,${O_TOP}) scale(${lockupIcon})">${icon.content}</g>` +
         `<g transform="translate(${O_HEIGHT + GAP},0)">${word.content}</g>`,

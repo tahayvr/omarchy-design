@@ -1,0 +1,78 @@
+---
+layout: ../../layouts/Docs.astro
+title: Graphic elements
+status: draft
+description: The stepped bands, the pixel grid, the guide lines and the grain. They're what makes something look like Omarchy before you've read a word.
+---
+
+import Figure from "../../components/brand/Figure.astro";
+import BandDiagram from "../../components/brand/BandDiagram.astro";
+import GridDiagram from "../../components/brand/GridDiagram.astro";
+import Ladder from "../../components/brand/Ladder.astro";
+
+## Stepped bands
+
+The stepped fill is a rule, not a gradient. Five flat bands, always horizontal, always light at the top, in exactly **4 · 3 · 4 · 3 · 5** pixel rows — the proportion measured off the original wordmark. On the wordmark each band is a whole number of its pixel rows, so every edge lands on the grid.
+
+<Figure caption="Reference bands: the Hackerman theme">
+  <BandDiagram />
+</Figure>
+
+The colors change; the rows and the order don't. The Logo Foundry holds both fixed and only lets you pick colors.
+
+### From one accent
+
+The five colors come from a single color, the theme's `accent`. It becomes the middle band; the two above are lifted toward white in its own hue, the two below sink toward black and lose saturation. Any theme gets a stepped mark this way, without anyone choosing five colors.
+
+<Ladder />
+
+### When to use which fill
+
+| Fill        | Use it for                                                         | Avoid it for                       |
+| ----------- | ------------------------------------------------------------------ | ---------------------------------- |
+| Stepped     | The mark as the hero: covers, splash screens, stickers, wallpapers | Small sizes, where the bands blur  |
+| Flat        | Interfaces, small sizes, one-ink print, anything next to body text | —                                  |
+| Gradient    | Motion and experiments, where a smooth ramp moves                  | Anywhere the stepped fill would do |
+| Holographic | One-off moments: launches, merch, animated loops                   | Anything that has to last          |
+
+## Pixel grid
+
+Everything is counted in the wordmark's pixel: one square of its grid. Shapes sit on it, gaps are whole numbers of it, and nothing is nudged half a pixel to look right.
+
+<Figure caption="One pixel = one square of the wordmark's grid">
+  <GridDiagram />
+</Figure>
+
+## Guide lines
+
+Thin rules that run edge to edge through the features of the mark — the stems of the "o" and "h", the baseline — as if the drawing's construction lines were left in. They're what frames the homepage and every page of this site.
+
+- 1px, in a color just above the ground (`#2a2e30` on the brand surface).
+- Always full-bleed: a guide line never stops short of the edge of the page or frame.
+- Only through real features of the mark, or along a section's edge. Never decorative crosshatching.
+
+## Grain
+
+A fine monochrome noise over the ground, so large dark areas read as a surface rather than a void. It's generated, not an image:
+
+```xml
+<filter id="n">
+  <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+  <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+</filter>
+```
+
+Tiled at 240px, white, at **5.5%** opacity over the ground. Enough to feel, never enough to see as a pattern.
+
+<div class="grain-demo" aria-hidden="true">
+  <span>5.5%</span>
+  <span>20%, to show it</span>
+</div>
+
+<style>{`
+  .grain-demo { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--guide); margin: 0 0 24px; max-width: none !important; }
+  .grain-demo span { position: relative; height: 140px; background: var(--brand-surface); padding: 10px 12px; font-size: 11px; color: var(--dim); }
+  .grain-demo span::before { content: ""; position: absolute; inset: 0; background-image: var(--grain); opacity: 0.055; }
+  .grain-demo span + span { border-left: 1px solid var(--guide); }
+  .grain-demo span + span::before { opacity: 0.2; }
+`}</style>

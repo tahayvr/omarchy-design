@@ -1,4 +1,4 @@
-import { ladder } from "../core/gradients.js";
+import { ladder } from "../core/bands.js";
 
 export const STYLES = [
   {

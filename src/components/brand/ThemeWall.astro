@@ -1,0 +1,54 @@
+---
+/* The stepped wordmark in every Omarchy theme the Logo Foundry knows, each
+   on its own ground: one rule, any accent. */
+import Mark from "../Mark.astro";
+import { MARKS, THEME_BANDS } from "../../lib/brand";
+
+interface Props {
+  limit?: number;
+}
+const { limit } = Astro.props;
+const themes = limit ? THEME_BANDS.slice(0, limit) : THEME_BANDS;
+---
+
+<ul class="wall">
+  {
+    themes.map((t) => (
+      <li>
+        <div class="tile" style={`background:${t.bg}`}>
+          <Mark mark={MARKS.wordmark} bands={t.cols} label={`Wordmark in ${t.name}`} />
+        </div>
+        <span class="nm">{t.name}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .wall {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+    max-width: none !important;
+  }
+  .wall li {
+    margin: 0 !important;
+  }
+  .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 9;
+    padding: 0 18%;
+    border: 1px solid var(--guide);
+  }
+  .nm {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--dim);
+  }
+</style>

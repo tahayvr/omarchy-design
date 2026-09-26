@@ -1,0 +1,53 @@
+---
+/* One of the marks, drawn inline from the master SVG. Flat in the current
+   text color by default; pass `bands` for the stepped fill (five colors, top
+   to bottom), laid out by the same band rule the Logo Foundry uses. */
+import { bandOffsets, type Mark } from "../lib/brand";
+
+interface Props {
+  mark: Mark;
+  bands?: string[];
+  fill?: string;
+  label?: string;
+  class?: string;
+  style?: string;
+}
+const { mark: m, bands, fill = "currentColor", label, class: cls, style } = Astro.props;
+const id = `mk${Math.random().toString(36).slice(2, 8)}`;
+const O = bandOffsets();
+---
+
+<svg
+  class:list={["mark-svg", cls]}
+  style={style}
+  viewBox={`0 0 ${m.w} ${m.h}`}
+  role="img"
+  aria-label={label ?? `Omarchy ${m.label.toLowerCase()}`}
+>
+  {
+    bands ? (
+      <>
+        <defs>
+          <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width={m.w} height={m.h}>
+            <g fill="#fff" set:html={m.content} />
+          </mask>
+        </defs>
+        <g mask={`url(#${id})`}>
+          {bands.map((c, i) => (
+            <rect x="0" y={O[i] * m.h} width={m.w} height={(O[i + 1] - O[i]) * m.h} fill={c} />
+          ))}
+        </g>
+      </>
+    ) : (
+      <g fill={fill} set:html={m.content} />
+    )
+  }
+</svg>
+
+<style>
+  .mark-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

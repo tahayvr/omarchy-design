@@ -6,22 +6,36 @@ description: How Omarchy looks and speaks — the wordmark, the stepped bands, t
 
 import Cards from "../../components/Cards.astro";
 
-The brand is made of a few parts that always travel together: a pixel wordmark drawn on a strict grid, a five-band stepped fill, and a fine grain over a near-black ground. The rules for each are being written down; until then, the Logo Foundry already enforces them.
+The brand is made of a few parts that always travel together: a pixel wordmark drawn on a strict grid, a five-band stepped fill built from one accent, and a fine grain over a near-black ground. Each is written down below, and the Logo Foundry enforces them for you.
 
 <Cards
   items={[
+    {
+      title: "Logo",
+      href: "/brand/logo/",
+      blurb:
+        "The wordmark, icon and lockup: construction, clear space, minimum size and what never to do.",
+    },
+    {
+      title: "Graphic elements",
+      href: "/brand/graphic-elements/",
+      blurb: "The stepped bands, the pixel grid, guide lines and grain.",
+    },
+    {
+      title: "Voice and tone",
+      href: "/brand/voice/",
+      blurb: "How Omarchy sounds, and how that shifts from a launch to an error.",
+    },
+    {
+      title: "Downloads",
+      href: "/brand/downloads/",
+      blurb: "Master files for every mark, one by one or in a zip.",
+    },
     {
       title: "Logo Foundry",
       href: "/logo/",
       tag: "tool",
       blurb: "Make the wordmark, icon or lockup in any style and export it as SVG or PNG.",
     },
-    {
-      title: "Logo rules",
-      blurb: "Clear space, minimum size, lockups, and what never to do to the mark.",
-    },
-    { title: "Voice and tone", blurb: "How Omarchy sounds, with examples." },
-    { title: "Graphic elements", blurb: "The stepped bands, the pixel grid and the grain." },
-    { title: "Downloads", blurb: "Master files for the logo, icon and wallpapers." },
   ]}
 />
