@@ -2,7 +2,7 @@ import { state } from "./state.js";
 import { frame, axis, tagline } from "./geometry.js";
 import { TAGLINE } from "../data/marks.js";
 import { clamp } from "../../shared/util.js";
-import { rampStops, stepStops, holoStops, STEP_ANGLE } from "./gradients.js";
+import { rampStops, holoStops, bandOffsets, bandColors } from "./gradients.js";
 
 export const SVGNS = "http://www.w3.org/2000/svg";
 
@@ -113,11 +113,29 @@ export function buildSVG() {
 
   if (st.mode === "solid") {
     paint.appendChild(el("rect", Object.assign({ fill: st.solid }, cover)));
-  } else if (st.mode === "linear" || st.mode === "stepped") {
-    const stepped = st.mode === "stepped";
-    const stops = stepped ? stepStops() : rampStops();
-    defs.appendChild(linearGrad(P + "g", stops, axis(stepped ? STEP_ANGLE : st.angle)));
+  } else if (st.mode === "linear") {
+    defs.appendChild(linearGrad(P + "g", rampStops(), axis(st.angle)));
     paint.appendChild(el("rect", Object.assign({ fill: `url(#${P}g)` }, cover)));
+  } else if (st.mode === "stepped") {
+    /* one flat rect per band, not a gradient with doubled stops: design apps
+       and viewers often blend those hard stops into a smooth ramp. the outer
+       bands run to the frame edge so padding never shows a gap. */
+    const O = bandOffsets(),
+      C = bandColors(),
+      bottom = Math.max(f.y + f.h, a.h);
+    C.forEach((c, i) => {
+      const y0 = i === 0 ? Math.min(f.y, 0) : O[i] * a.h;
+      const y1 = i === C.length - 1 ? bottom : O[i + 1] * a.h;
+      paint.appendChild(
+        el("rect", {
+          x: f.x,
+          y: +y0.toFixed(3),
+          width: f.w,
+          height: +(y1 - y0).toFixed(3),
+          fill: c,
+        }),
+      );
+    });
   } else if (st.mode === "holo") {
     const base = cycleAxis(st.holo.cycles, st.phase, "reflect");
     const g = linearGrad(P + "g", holoStops(), base, { spreadMethod: "reflect" });

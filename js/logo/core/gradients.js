@@ -16,7 +16,6 @@ export function rampStops() {
    proportions and direction are not. */
 export const BAND_RATIO = Object.freeze([4, 3, 4, 3, 5]);
 export const BAND_TOTAL = BAND_RATIO.reduce((a, b) => a + b, 0);
-export const STEP_ANGLE = 90;
 
 export function bandOffsets() {
   const o = [];
@@ -33,16 +32,6 @@ export function bandColors() {
   const c = state.stops.slice(0, BAND_RATIO.length).map((s) => s.c);
   while (c.length < BAND_RATIO.length) c.push(c[c.length - 1] || "#ffffff");
   return c;
-}
-
-export function stepStops() {
-  const O = bandOffsets(),
-    C = bandColors(),
-    out = [];
-  for (let i = 0; i < BAND_RATIO.length; i++) {
-    out.push({ o: O[i], c: C[i] }, { o: O[i + 1], c: C[i] });
-  }
-  return out;
 }
 
 export function bandRows() {
