@@ -27,7 +27,7 @@ const section = sectionOf(here);
 const isHere = (href?: string) => !!href && url(href) === here;
 
 const repo = "https://github.com/tahayvr/omarchy-design/blob/master/";
-const source = p.file ? p.file.slice(p.file.indexOf("src/pages/")) : undefined;
+const source = p.file?.includes("src/") ? p.file.slice(p.file.indexOf("src/")) : undefined;
 ---
 
 <Base title={title} description={description}>

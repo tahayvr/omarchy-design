@@ -3,6 +3,8 @@
    the roadmap is visible, but it isn't a link. `tool` items leave the docs
    for one of the plain-HTML tools in public/. */
 
+import { COMPONENTS } from "./components";
+
 export type NavItem = {
   title: string;
   href?: string;
@@ -50,8 +52,8 @@ export const NAV: NavSection[] = [
     blurb: "How the desktop is built, in any theme.",
     items: [
       { title: "Overview", href: "/desktop/" },
-      { title: "Theme anatomy" },
-      { title: "Components" },
+      { title: "Theme anatomy", href: "/desktop/anatomy/" },
+      ...COMPONENTS.map((c) => ({ title: c.title, href: `/desktop/${c.id}/` })),
       { title: "Patterns" },
     ],
   },

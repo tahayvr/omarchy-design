@@ -1,0 +1,219 @@
+---
+/* A schematic of one part of the desktop, painted only with the shell
+   tokens (--s-*) and theme keys (--k-*) the ThemePicker sets. Layout is
+   approximate; the colors, alphas and borders are Omarchy's. */
+import "../../styles/desktop.css";
+
+interface Props {
+  kind: string;
+}
+const { kind } = Astro.props;
+const menuRows = ["Apps", "Learn", "Trigger", "Style", "Setup", "Update", "System"];
+---
+
+<div class:list={["shot", `shot-${kind}`]} role="img" aria-label={`Schematic of the ${kind.replace(/-/g, " ")}`}>
+  {
+    (kind === "bar" || kind === "popups" || kind === "anatomy") && (
+      <div class="bar">
+        <div class="ws">
+          <span class="on">1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+        </div>
+        <div class="clock">Thursday 23:40</div>
+        <div class="status">
+          <span class="attn">● rec</span>
+          <span class="hovered">wifi</span>
+          <span>vol 60</span>
+          <span>bat 92</span>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    kind === "bar" && (
+      <div class="desk-note">
+        <span>
+          <b class="attn-key">red</b> marks the module asking for attention
+        </span>
+      </div>
+    )
+  }
+
+  {
+    (kind === "launcher" || kind === "menus") && (
+      <>
+        <div class="win-bg" />
+        <div class={`scrim ${kind}`} />
+        <div class={`card ${kind}`}>
+          {kind === "launcher" ? (
+            <>
+              <div class="query">
+                fire<span class="caret" />
+              </div>
+              <div class="row sel">Firefox</div>
+              <div class="row">Files</div>
+              <div class="row">Font Viewer</div>
+              <div class="row">Settings › Firewall</div>
+            </>
+          ) : (
+            <>
+              <div class="mtitle">Go</div>
+              {menuRows.map((r, i) => (
+                <div class:list={["row", { sel: i === 3 }]}>{r}</div>
+              ))}
+            </>
+          )}
+        </div>
+      </>
+    )
+  }
+
+  {
+    kind === "notifications" && (
+      <>
+        <div class="win-bg" />
+        <div class="toast">
+          <div class="nt">Screenshot saved</div>
+          <div class="nb">Copied to the clipboard and saved to Pictures.</div>
+          <div class="count" />
+        </div>
+        <div class="toast second">
+          <div class="nt">Update available</div>
+          <div class="nb">A new version of Omarchy is ready to install.</div>
+        </div>
+      </>
+    )
+  }
+
+  {
+    kind === "popups" && (
+      <>
+        <div class="flyout">
+          <div class="row sel">Wi-Fi · home</div>
+          <div class="row">office</div>
+          <div class="row">Turn Wi-Fi off</div>
+        </div>
+        <div class="tip">Volume 60%</div>
+      </>
+    )
+  }
+
+  {
+    kind === "lock-screen" && (
+      <div class="lock">
+        <div class="clockbig">23:40</div>
+        <div class="fields">
+          <div class="field idle">
+            <span class="ph">Enter password</span>
+          </div>
+          <div class="field typing">
+            <span class="dots">●●●●●●</span>
+          </div>
+          <div class="field wrong">
+            <span class="err">Wrong password</span>
+          </div>
+        </div>
+        <div class="states">
+          <span>idle</span>
+          <span>typing</span>
+          <span>wrong</span>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    kind === "password-prompt" && (
+      <>
+        <div class="win-bg" />
+        <div class="scrim polkit" />
+        <div class="prompts">
+          <div class="polkit-card">
+            <div class="glyph">⌂</div>
+            <div class="pt">Authentication required</div>
+            <div class="pb">Update needs your password to install packages.</div>
+            <div class="pfield">●●●●●</div>
+          </div>
+          <div class="polkit-card bad">
+            <div class="glyph">⌂</div>
+            <div class="pt">Authentication required</div>
+            <div class="pb">Update needs your password to install packages.</div>
+            <div class="pfield">Wrong password</div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  {
+    kind === "controls" && (
+      <div class="panel">
+        {["normal", "hover-cursor", "focus", "selected", "pressed"].map((st) => (
+          <div class="ctl-col">
+            <button type="button" tabindex="-1" class={`ctl ${st}`}>
+              Apply
+            </button>
+            <span class="ctl-name">{st.replace("-cursor", "")}</span>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    (kind === "window-borders" || kind === "anatomy") && (
+      <div class="wins">
+        <div class="win active">
+          <div class="term">
+            <span class="p">~/code</span> <span class="b">main</span> <span class="f">❯ git status</span>
+            <br />
+            <span class="g">modified:</span> <span class="f">src/theme.css</span>
+            <br />
+            <span class="y">untracked:</span> <span class="m">notes.md</span>
+            <br />
+            <span class="p">~/code</span> <span class="f">❯</span> <span class="cur" />
+          </div>
+        </div>
+        <div class="win">
+          <div class="term">
+            <span class="c">btop</span> <span class="mu">— cpu 12% · mem 4.1G</span>
+            <br />
+            <span class="r">error:</span> <span class="f">disk almost full</span>
+            <br />
+            <span class="mu"># comments stay quiet</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  {
+    kind === "anatomy" && (
+      <div class="toast corner">
+        <div class="nt">Screenshot saved</div>
+        <div class="nb">Copied to the clipboard.</div>
+        <div class="count" />
+      </div>
+    )
+  }
+
+  {
+    kind === "image-picker" && (
+      <>
+        <div class="win-bg" />
+        <div class="scrim picker" />
+        <div class="slices">
+          <span class="slice s1" />
+          <span class="slice s2" />
+          <span class="slice s3 on" />
+          <span class="slice s4" />
+          <span class="slice s5" />
+        </div>
+        <div class="slice-name">tokyo-night.png</div>
+      </>
+    )
+  }
+</div>

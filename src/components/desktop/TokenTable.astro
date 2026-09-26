@@ -1,0 +1,70 @@
+---
+/* A shell section's color tokens: what each one is made of, with a swatch
+   in the theme being previewed. */
+import { section, colorTokens, numberTokens, describe } from "../../lib/shell";
+
+interface Props {
+  id: string;
+}
+const s = section(Astro.props.id);
+const colors = colorTokens(s);
+const sizes = numberTokens(s);
+---
+
+<table class="tokens">
+  <thead>
+    <tr>
+      <th>[{s.id}]</th>
+      <th>Made from</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      colors.map((t) => (
+        <tr>
+          <td class="tk">
+            <span class="sw" style={`--c:var(--s-${s.id}-${t.name})`} />
+            <code>{t.name}</code>
+          </td>
+          <td>{describe(t)}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+{
+  sizes.length > 0 && (
+    <p class="sizes">
+      Sizes:{" "}
+      {sizes.map((z, i) => (
+        <>
+          {i > 0 && ", "}
+          <code>{z.name}</code> {z.n}
+        </>
+      ))}
+      .
+    </p>
+  )
+}
+
+<style>
+  .tk {
+    white-space: nowrap;
+  }
+  /* the swatch sits on a checkerboard so alpha reads as alpha */
+  .sw {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    vertical-align: -3px;
+    border: 1px solid var(--guide);
+    background:
+      linear-gradient(var(--c), var(--c)),
+      repeating-conic-gradient(#444 0 25%, #1a1a1a 0 50%) 0 0 / 8px 8px;
+  }
+  .sizes {
+    color: var(--ink2);
+    font-size: 13px;
+  }
+</style>

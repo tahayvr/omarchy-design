@@ -6,6 +6,7 @@ description: How the Omarchy desktop is built. Every part is described by the co
 ---
 
 import Cards from "../../components/Cards.astro";
+import { COMPONENTS } from "../../data/components";
 
 ## The theme contract
 
@@ -22,16 +23,18 @@ A theme is a [`colors.toml`](../foundations/color/). When it's set, Omarchy fill
 
 From the templates in Omarchy's `default/themed` folder.
 
-## Coming next
+## The parts
+
+Every part of the desktop, painted from Omarchy's own `shell.toml` template. Pick any shipped theme — or paste your own `colors.toml` — and every preview repaints.
 
 <Cards
   items={[
-    { title: "Theme anatomy", blurb: "Which role paints which part of each app, drawn out." },
     {
-      title: "Components",
-      blurb:
-        "The bar, launcher, notifications and lock screen, one page each, shown in more than one theme.",
+      title: "Theme anatomy",
+      href: "/desktop/anatomy/",
+      blurb: "How one colors.toml becomes the whole desktop.",
     },
+    ...COMPONENTS.map((c) => ({ title: c.title, href: `/desktop/${c.id}/`, blurb: c.blurb })),
     {
       title: "Patterns",
       blurb: "Keybindings, menus, first run, and theming an app that isn't covered yet.",

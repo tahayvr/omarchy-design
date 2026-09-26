@@ -1,0 +1,503 @@
+/* Desktop previews. Painted only with --s-* (shell tokens from Omarchy's
+   shell.toml.tpl) and --k-* (theme keys), which the ThemePicker sets on
+   :root. Sizes follow the template's defaults at a base font size of 12. */
+
+.shot {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  min-height: 260px;
+  border: 1px solid var(--guide);
+  font: 12px/1.4 var(--mono);
+  color: var(--k-foreground);
+  /* the wallpaper: the theme's own ground, deepening toward the corner */
+  background:
+    radial-gradient(
+      120% 90% at 85% 110%,
+      color-mix(in srgb, var(--k-accent) 22%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(160deg, var(--k-dark-background), var(--k-darker-background));
+  isolation: isolate;
+}
+.shot * {
+  box-sizing: border-box;
+}
+.win-bg {
+  position: absolute;
+  inset: 12% 8% 10%;
+  background: var(--k-background);
+  border: 2px solid var(--k-border-inactive);
+  opacity: 0.9;
+}
+
+/* ---------- bar ---------- */
+.bar {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 10px;
+  background: var(--s-bar-background);
+  color: var(--s-bar-text);
+}
+.ws {
+  display: flex;
+  gap: 12px;
+}
+.ws span {
+  opacity: 0.5;
+}
+.ws .on {
+  opacity: 1;
+}
+.status {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+.attn,
+.attn-key {
+  color: var(--s-bar-active);
+}
+.desk-note {
+  position: absolute;
+  inset: 26px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--k-foreground);
+  opacity: 0.6;
+}
+.desk-note span {
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--k-background) 70%, transparent);
+}
+
+/* ---------- scrim + card: launcher, menus ---------- */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.scrim.launcher {
+  background: var(--s-launcher-scrim);
+}
+.scrim.menus {
+  background: var(--s-menu-scrim);
+}
+.scrim.polkit {
+  background: var(--s-polkit-scrim);
+}
+.scrim.picker {
+  background: var(--s-image-picker-scrim);
+}
+.card {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, 70%);
+  padding: 14px;
+  border: 2px solid;
+}
+.card.launcher {
+  background: var(--s-launcher-background);
+  color: var(--s-launcher-text);
+  border-color: var(--s-launcher-border);
+}
+.card.menus {
+  width: min(240px, 60%);
+  background: var(--s-menu-background);
+  color: var(--s-menu-text);
+  border-color: var(--s-menu-border);
+}
+.query {
+  padding: 6px 10px 10px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--k-foreground) 20%, transparent);
+}
+.caret {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: var(--k-cursor);
+}
+.mtitle {
+  padding: 0 10px 8px;
+  opacity: 0.6;
+}
+.row {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid transparent;
+}
+.card.launcher .row.sel {
+  background: var(--s-launcher-selected-background);
+  color: var(--s-launcher-selected-text);
+  border-color: var(--s-launcher-selected-border);
+}
+.card.menus .row.sel {
+  background: var(--s-menu-selected-background);
+  color: var(--s-menu-selected-text);
+  border-color: var(--s-menu-selected-border);
+}
+
+/* ---------- notifications ---------- */
+.toast {
+  position: absolute;
+  z-index: 2;
+  top: 38px;
+  right: 14px;
+  width: min(300px, 60%);
+  padding: 12px 14px 14px;
+  background: var(--s-notifications-background);
+  color: var(--s-notifications-text);
+  border: 2px solid var(--s-notifications-border);
+}
+.toast.second {
+  top: calc(38px + 108px);
+}
+.shot-notifications .toast {
+  top: 14px;
+}
+.shot-notifications .toast.second {
+  top: 122px;
+}
+.nt {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.nb {
+  opacity: 0.85;
+}
+.count {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 62%;
+  background: var(--s-notifications-countdown);
+}
+
+/* ---------- popups, tooltip ---------- */
+.flyout {
+  position: absolute;
+  z-index: 4;
+  top: 32px;
+  right: 110px;
+  width: 200px;
+  padding: 8px;
+  background: var(--s-popups-background);
+  color: var(--s-popups-text);
+  border: 2px solid var(--s-popups-border);
+}
+.flyout .row.sel {
+  background: color-mix(in srgb, var(--k-foreground) 8%, transparent);
+}
+.tip {
+  position: absolute;
+  z-index: 4;
+  top: 34px;
+  right: 16px;
+  padding: 4px 8px;
+  background: var(--s-tooltip-background);
+  color: var(--s-tooltip-text);
+  border: 1px solid var(--s-tooltip-border);
+}
+
+/* ---------- lock screen ---------- */
+.lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.clockbig {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--s-lock-text);
+}
+.fields,
+.states {
+  display: flex;
+  gap: 14px;
+}
+.field {
+  width: 170px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--s-lock-background);
+  color: var(--s-lock-text);
+  border: 2px solid var(--s-lock-border);
+}
+.field.typing {
+  border-color: var(--s-lock-border-active);
+}
+.field.wrong {
+  border-color: var(--s-lock-border-error);
+}
+.ph {
+  color: var(--s-lock-placeholder);
+}
+.err {
+  color: var(--s-lock-text-error);
+}
+.dots {
+  letter-spacing: 0.2em;
+}
+.states span {
+  width: 170px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--s-lock-placeholder);
+}
+
+/* ---------- password prompt ---------- */
+.prompts {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px;
+}
+.polkit-card {
+  width: min(250px, 46%);
+  padding: 16px;
+  background: var(--s-polkit-background);
+  color: var(--s-polkit-text);
+  border: 2px solid var(--s-polkit-border);
+}
+.polkit-card.bad {
+  border-color: var(--s-polkit-border-error);
+}
+.glyph {
+  font-size: 22px;
+  line-height: 1;
+  color: var(--s-polkit-accent);
+}
+.bad .glyph,
+.bad .pfield {
+  color: var(--s-polkit-text-error);
+}
+.pt {
+  font-weight: 700;
+  margin: 10px 0 4px;
+}
+.pb {
+  opacity: 0.8;
+  font-size: 11px;
+}
+.pfield {
+  margin-top: 12px;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--k-foreground) 40%, transparent);
+}
+
+/* ---------- controls ---------- */
+.panel {
+  position: absolute;
+  inset: 14%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 14px;
+  padding: 18px;
+  background: var(--k-background);
+  border: 2px solid var(--k-border-inactive);
+}
+.ctl-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ctl {
+  height: 28px;
+  padding: 0 14px;
+  font: inherit;
+  color: var(--s-controls-normal-color);
+  background: var(--s-controls-normal-fill);
+  border: 1px solid var(--s-controls-normal-border);
+  cursor: default;
+}
+.ctl.hover-cursor {
+  color: var(--s-controls-hover-cursor-color);
+  background: var(--s-controls-hover-cursor-fill);
+  border-color: var(--s-controls-hover-cursor-border);
+}
+.ctl.focus {
+  color: var(--s-controls-focus-color);
+  background: var(--s-controls-focus-fill);
+  border-color: var(--s-controls-focus-border);
+}
+.ctl.selected {
+  color: var(--s-controls-selected-color);
+  background: var(--s-controls-selected-fill);
+  border-color: transparent;
+}
+/* pressed has only a fill strength in the template: foreground at 22% */
+.ctl.pressed {
+  background: color-mix(in srgb, var(--s-controls-normal-color) 22%, transparent);
+}
+.ctl-name {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--k-foreground) 60%, transparent);
+}
+
+/* ---------- windows ---------- */
+.wins {
+  position: absolute;
+  inset: 40px 12px 12px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 10px;
+}
+.shot-window-borders .wins {
+  top: 12px;
+}
+.win {
+  background: var(--k-background);
+  border: 2px solid var(--k-border-inactive);
+  padding: 10px 12px;
+  overflow: hidden;
+}
+.win.active {
+  border-color: var(--k-border-active);
+}
+.term {
+  line-height: 1.7;
+  white-space: nowrap;
+}
+.term .p {
+  color: var(--k-blue);
+}
+.term .b {
+  color: var(--k-magenta);
+}
+.term .f {
+  color: var(--k-foreground);
+}
+.term .g {
+  color: var(--k-green);
+}
+.term .y {
+  color: var(--k-yellow);
+}
+.term .m {
+  color: var(--k-bright-magenta);
+}
+.term .c {
+  color: var(--k-cyan);
+}
+.term .r {
+  color: var(--k-red);
+}
+.term .mu {
+  color: var(--k-muted);
+}
+.cur {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  vertical-align: -3px;
+  background: var(--k-cursor);
+}
+.toast.corner {
+  top: auto;
+  bottom: 20px;
+  right: 20px;
+  width: 240px;
+}
+
+/* ---------- image picker ---------- */
+.slices {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.slice {
+  width: 11%;
+  height: 58%;
+  border: 2px solid var(--s-image-picker-unselected-border);
+}
+.slice.on {
+  width: 22%;
+  height: 66%;
+  border-color: var(--s-image-picker-selected-border);
+}
+.s1 {
+  background: linear-gradient(var(--k-blue), var(--k-darker-background));
+}
+.s2 {
+  background: linear-gradient(var(--k-magenta), var(--k-darker-background));
+}
+.s3 {
+  background: linear-gradient(160deg, var(--k-accent), var(--k-dark-background));
+}
+.s4 {
+  background: linear-gradient(var(--k-green), var(--k-darker-background));
+}
+.s5 {
+  background: linear-gradient(var(--k-yellow), var(--k-darker-background));
+}
+.slice-name {
+  position: absolute;
+  z-index: 2;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--s-image-picker-text);
+}
+
+@media (max-width: 700px) {
+  .shot {
+    aspect-ratio: auto;
+    min-height: 320px;
+    font-size: 11px;
+  }
+  .clock {
+    display: none;
+  }
+  .bar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .fields,
+  .states {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .states {
+    display: none;
+  }
+  .prompts {
+    flex-direction: column;
+  }
+  .polkit-card {
+    width: 80%;
+  }
+}

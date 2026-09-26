@@ -1,0 +1,144 @@
+---
+/* Picks the theme the desktop previews are painted in: any theme Omarchy
+   ships, or a pasted colors.toml. It sets --k-* (the theme's keys) and the
+   --s-* shell tokens built from them; only previews read those, so the
+   site itself stays dark and neutral. The choice is remembered per browser. */
+import { THEMES } from "../../lib/themes";
+import { keyVars } from "../../lib/resolve";
+import { shellCss } from "../../lib/shell";
+
+interface Props {
+  initial?: string;
+}
+const { initial = "hackerman" } = Astro.props;
+const vars = Object.fromEntries(THEMES.map((t) => [t.id, keyVars(t.colors)]));
+const start = vars[initial] ?? Object.values(vars)[0];
+const rootCss = `:root{${Object.entries(start)
+  .map(([k, v]) => `${k}:${v};`)
+  .join("")}${shellCss()}}`;
+---
+
+<Fragment set:html={`<style>${rootCss}</style>`} />
+
+<div class="theme-picker" data-initial={initial}>
+  <label>
+    <span class="lbl">Preview in</span>
+    <select class="pick">
+      {THEMES.map((t) => <option value={t.id} selected={t.id === initial}>{t.id}</option>)}
+      <option value="pasted" hidden>pasted colors.toml</option>
+    </select>
+  </label>
+  <details class="paste">
+    <summary>paste a colors.toml</summary>
+    <textarea spellcheck="false" placeholder={'accent = "#82FB9C"\nbackground = "#0B0C16"\nforeground = "#ddf7ff"\n…'}></textarea>
+    <button type="button" class="apply">preview it</button>
+    <span class="msg" aria-live="polite"></span>
+  </details>
+  <script type="application/json" class="themes-json" set:html={JSON.stringify(vars)} />
+</div>
+
+<script>
+  import { parseColors, resolveColors, keyVars } from "../../lib/resolve";
+
+  const KEY = "omarchy-design:preview-theme";
+  const root = document.documentElement;
+  const pickers = [...document.querySelectorAll<HTMLElement>(".theme-picker")];
+  const themes: Record<string, Record<string, string>> = JSON.parse(
+    pickers[0]?.querySelector(".themes-json")?.textContent ?? "{}",
+  );
+
+  const apply = (vars: Record<string, string>) => {
+    for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
+  };
+  const choose = (id: string) => {
+    if (themes[id]) apply(themes[id]);
+    for (const p of pickers) p.querySelector<HTMLSelectElement>(".pick")!.value = id;
+  };
+
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem(KEY);
+  } catch {}
+  if (saved && themes[saved]) choose(saved);
+
+  for (const p of pickers) {
+    const select = p.querySelector<HTMLSelectElement>(".pick")!;
+    select.addEventListener("change", () => {
+      choose(select.value);
+      try {
+        localStorage.setItem(KEY, select.value);
+      } catch {}
+    });
+    const text = p.querySelector<HTMLTextAreaElement>("textarea")!;
+    const msg = p.querySelector<HTMLElement>(".msg")!;
+    p.querySelector(".apply")!.addEventListener("click", () => {
+      const raw = parseColors(text.value);
+      if (!raw.background || !raw.foreground || !raw.accent) {
+        msg.textContent = "needs at least background, foreground and accent";
+        return;
+      }
+      apply(keyVars(resolveColors(raw)));
+      for (const q of pickers) q.querySelector<HTMLSelectElement>(".pick")!.value = "pasted";
+      msg.textContent = "previewing your theme";
+    });
+  }
+</script>
+
+<style>
+  .theme-picker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 20px;
+    margin: 0 0 16px;
+    font-size: 12px;
+  }
+  .lbl {
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 11px;
+    margin-right: 10px;
+  }
+  select {
+    background: var(--neutral-900);
+    border: 1px solid var(--line2);
+    padding: 5px 8px;
+    color: #fff;
+    font-size: 12px;
+  }
+  summary {
+    cursor: pointer;
+    color: var(--ink2);
+  }
+  summary:hover {
+    color: #fff;
+  }
+  .paste[open] {
+    flex-basis: 100%;
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: 150px;
+    margin: 10px 0 8px;
+    background: var(--neutral-950);
+    border: 1px solid var(--guide);
+    color: var(--ink);
+    padding: 10px;
+    font: 12px/1.5 var(--mono);
+  }
+  .apply {
+    border: 1px solid var(--line2);
+    padding: 5px 10px;
+    color: #fff;
+  }
+  .apply:hover {
+    border-color: var(--neutral-400);
+  }
+  .msg {
+    margin-left: 10px;
+    color: var(--dim);
+  }
+</style>

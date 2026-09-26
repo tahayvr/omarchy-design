@@ -1,0 +1,95 @@
+---
+/* The whole desktop at once, with each part linked to its page. */
+import Docs from "../../layouts/Docs.astro";
+import ThemePicker from "../../components/desktop/ThemePicker.astro";
+import Shot from "../../components/desktop/Shot.astro";
+import { COMPONENTS } from "../../data/components";
+import { url } from "../../data/nav";
+import { SECTIONS } from "../../lib/shell";
+
+const headings = [
+  { depth: 2, slug: "at-a-glance", text: "At a glance" },
+  { depth: 2, slug: "how-a-theme-becomes-the-desktop", text: "How a theme becomes the desktop" },
+  { depth: 2, slug: "the-parts", text: "The parts" },
+];
+const shared = ["spacing", "font"].filter((id) => SECTIONS.some((s) => s.id === id));
+---
+
+<Docs
+  title="Theme anatomy"
+  status="draft"
+  description="How one colors.toml becomes the whole desktop, and which part is painted with which keys. Pick a theme and every preview on these pages repaints."
+  headings={headings}
+  file="src/pages/desktop/anatomy.astro"
+>
+  <h2 id="at-a-glance">At a glance</h2>
+  <ThemePicker />
+  <Shot kind="anatomy" />
+  <p class="note">
+    The bar, an active and an inactive window, and a notification. Schematic layout, real tokens.
+  </p>
+
+  <h2 id="how-a-theme-becomes-the-desktop">How a theme becomes the desktop</h2>
+  <ol>
+    <li>
+      A theme is a <code>colors.toml</code>: the <a href={url("/foundations/color/")}>keys</a> and
+      nothing else.
+    </li>
+    <li>
+      Omarchy works out any key the theme left out, then fills one template per app with them — the
+      terminal, the editors, btop, Hyprland, and <code>shell.toml</code> for the desktop itself.
+    </li>
+    <li>
+      <code>shell.toml</code> turns keys into tokens for each part: the menu's selected row is
+      <code>foreground</code> at 8% behind an <code>accent</code> label, the lock screen's
+      placeholder is <code>foreground</code> mixed a third of the way to <code>background</code>.
+    </li>
+    <li>
+      A theme that wants something different ships its own file for that app, and Omarchy uses it
+      instead of the template.
+    </li>
+  </ol>
+  <p>
+    Besides colors, <code>shell.toml</code> sets the shared {shared.map((s, i) => <>{i > 0 && " and "}<code>[{s}]</code></>)} scales,
+    so sizes grow with the font.
+  </p>
+
+  <h2 id="the-parts">The parts</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Part</th>
+        <th>Painted from</th>
+        <th>What it is</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        COMPONENTS.map((c) => (
+          <tr>
+            <td>
+              <a href={url(`/desktop/${c.id}/`)}>{c.title}</a>
+            </td>
+            <td>
+              {c.sections.map((s, i) => (
+                <>
+                  {i > 0 && " "}
+                  <code>[{s}]</code>
+                </>
+              ))}
+            </td>
+            <td>{c.blurb}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</Docs>
+
+<style>
+  .note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+</style>
