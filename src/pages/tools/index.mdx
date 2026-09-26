@@ -1,0 +1,23 @@
+---
+layout: ../../layouts/Docs.astro
+title: Tools
+description: Generators that follow the rules for you. Each one runs in the browser and exports files you can use straight away.
+---
+
+import Cards from "../../components/Cards.astro";
+
+<Cards
+  items={[
+    {
+      title: "Logo Foundry",
+      href: "/logo/",
+      tag: "tool",
+      blurb:
+        "The wordmark, icon and lockup in stepped, solid, gradient or holographic fills. Export SVG and PNG at any size.",
+    },
+    {
+      title: "Theme Foundry",
+      blurb: "Build a theme from the color roles, check its contrast, and export its files.",
+    },
+  ]}
+/>

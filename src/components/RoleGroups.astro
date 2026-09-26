@@ -1,0 +1,98 @@
+---
+/* The roles as empty slots: the system names a place for a color and says
+   what it paints, and the theme decides what goes in it. */
+import { ROLE_GROUPS, TERMINAL } from "../data/roles";
+---
+
+{
+  ROLE_GROUPS.map((g) => (
+    <section class="rgroup">
+      <h3>{g.title}</h3>
+      <p class="about">{g.about}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Paints</th>
+            <th>If a theme leaves it out</th>
+          </tr>
+        </thead>
+        <tbody>
+          {g.roles.map((r) => (
+            <tr>
+              <td class="rname">
+                <span class="slot" aria-hidden="true" />
+                <code>{r.name}</code>
+              </td>
+              <td>{r.paints}</td>
+              <td class="fb">{r.fallback ? <code>{r.fallback}</code> : "required"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  ))
+}
+
+<section class="rgroup">
+  <h3>Terminal</h3>
+  <p class="about">The sixteen colors every terminal theme already has. Numbered, not named for their hue, because a theme may put anything in them.</p>
+  <ol class="term">
+    {
+      TERMINAL.map((name, i) => (
+        <li>
+          <span class="slot" aria-hidden="true" />
+          <code>color{i}</code>
+          <span class="tname">{name}</span>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .rgroup + .rgroup {
+    margin-top: 8px;
+  }
+  .about {
+    color: var(--ink2);
+  }
+  .rname {
+    white-space: nowrap;
+  }
+  /* an empty slot: dashed, because the theme fills it, not the system */
+  .slot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+    vertical-align: -2px;
+    border: 1px dashed var(--neutral-500);
+  }
+  .fb {
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .term {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    max-width: none !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--guide);
+    font-size: 13px;
+  }
+  .term li {
+    margin: 0 !important;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--guide);
+    display: flex;
+    align-items: center;
+  }
+  .tname {
+    margin-left: 10px;
+    color: var(--dim);
+  }
+</style>

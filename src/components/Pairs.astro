@@ -1,0 +1,52 @@
+---
+/* The contrast a theme's pairs must reach. */
+import { PAIRS } from "../data/roles";
+---
+
+<table>
+  <thead>
+    <tr>
+      <th>Text or mark</th>
+      <th>On</th>
+      <th>At least</th>
+      <th>Rule</th>
+      <th>Why</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      PAIRS.map((p) => (
+        <tr>
+          <td>
+            <code>{p.fg}</code>
+          </td>
+          <td>
+            <code>{p.bg}</code>
+          </td>
+          <td class="num">{p.min}:1</td>
+          <td class:list={["lvl", p.level]}>{p.level}</td>
+          <td>{p.why}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .num {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .lvl {
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .must {
+    color: #fff;
+  }
+  .should {
+    color: var(--dim);
+  }
+</style>

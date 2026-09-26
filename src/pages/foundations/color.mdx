@@ -1,0 +1,36 @@
+---
+layout: ../../layouts/Docs.astro
+title: Color roles
+status: draft
+description: Omarchy never declares a color. It names the roles a theme fills, says what each one paints, and sets the contrast the theme's pairs must reach. Design and build with the role, never the hex.
+---
+
+import RoleGroups from "../../components/RoleGroups.astro";
+import Pairs from "../../components/Pairs.astro";
+import { cssTemplate } from "../../data/roles";
+
+## Why roles
+
+Every Omarchy theme repaints the whole desktop, and anyone can write one. A bar, a menu or a logo that hard-codes `#a8cd76` looks right in one theme and wrong in the rest. Asking for `accent` instead lets the same design hold in every theme, including ones that don't exist yet.
+
+So the rule is short: **name the role, never the color.** If a role you need is missing, it belongs in this list, not in your file.
+
+## The roles
+
+<RoleGroups />
+
+## Contrast
+
+A theme can pick any colors it likes, as long as these pairs clear the bar. The ratios are [WCAG 2 contrast ratios](https://www.w3.org/TR/WCAG21/#contrast-minimum): 4.5:1 for text you read, 3:1 for secondary text and for parts of the interface you need to find.
+
+<Pairs />
+
+A theme that misses a **must** is broken for someone. A **should** is a strong default a theme can break on purpose — a low-contrast palette for a dim room, say — but should say so.
+
+## As CSS
+
+The contract as custom properties a theme fills in. A value left out falls back to the role named beside it.
+
+<pre>
+  <code>{cssTemplate()}</code>
+</pre>

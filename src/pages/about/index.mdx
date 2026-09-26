@@ -1,0 +1,32 @@
+---
+layout: ../../layouts/Docs.astro
+title: About
+description: Omarchy Design is the design system for Omarchy — its brand, the rules its desktop is built on, and the tools that apply them.
+---
+
+import Cards from "../../components/Cards.astro";
+
+## What this is
+
+A reference for anyone who makes something for Omarchy: a theme, a wallpaper, an app, a poster. It says what the brand is, how the desktop is put together, and which rules keep both working in whatever theme a person runs.
+
+It's modelled on [Primer](https://primer.style/), GitHub's design system, with one difference that shapes everything: Omarchy is themed by its users, so this system names color roles and never declares colors.
+
+## Status
+
+Early. The foundations and the site itself are being built first; brand rules and desktop components follow. Pages marked **draft** are open to change, and items marked **soon** in the sidebar are planned.
+
+<Cards
+  items={[
+    {
+      title: "Principles",
+      href: "/about/principles/",
+      blurb: "What the system optimises for, in five lines.",
+    },
+    {
+      title: "Source",
+      href: "https://github.com/tahayvr/omarchy-design",
+      blurb: "The site and its tools on GitHub.",
+    },
+  ]}
+/>

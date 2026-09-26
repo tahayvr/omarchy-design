@@ -1,8 +1,15 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "env": { "browser": true, "es2024": true },
-  "ignorePatterns": ["dist", "node_modules"],
-  "categories": { "correctness": "error", "suspicious": "warn", "perf": "warn" },
+  "env": {
+    "browser": true,
+    "es2024": true
+  },
+  "ignorePatterns": ["dist", "node_modules", ".astro"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
   "rules": {
     "unicorn/prefer-add-event-listener": "off",
     "unicorn/consistent-function-scoping": "off"

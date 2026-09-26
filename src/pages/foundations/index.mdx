@@ -1,0 +1,30 @@
+---
+layout: ../../layouts/Docs.astro
+title: Foundations
+description: The rules under everything else. Omarchy is themed by the people who use it, so the foundations never pick a color — they name the roles a theme fills and the contrast it must reach.
+---
+
+import Cards from "../../components/Cards.astro";
+
+<Cards
+  items={[
+    {
+      title: "Color roles",
+      href: "/foundations/color/",
+      blurb:
+        "The places a theme puts its colors, what each one paints, and the contrast between them.",
+    },
+    {
+      title: "Typography",
+      href: "/foundations/typography/",
+      blurb: "Geist for headings, JetBrains Mono for everything else.",
+    },
+    {
+      title: "Grid and pixel unit",
+      blurb: "The pixel the logo is drawn on, and the spacing that follows from it.",
+    },
+    { title: "Iconography", blurb: "Pixel icons drawn on the same grid." },
+    { title: "Motion", blurb: "When things move, how fast, and when they don't." },
+    { title: "Accessibility", blurb: "Keyboard first, and contrast that holds in any theme." },
+  ]}
+/>

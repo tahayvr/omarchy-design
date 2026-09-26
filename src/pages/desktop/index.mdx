@@ -1,0 +1,40 @@
+---
+layout: ../../layouts/Docs.astro
+title: Desktop UI
+status: draft
+description: How the Omarchy desktop is built. Every part is described by the color roles it uses, so it holds in any theme — the ones Omarchy ships and the ones people write.
+---
+
+import Cards from "../../components/Cards.astro";
+
+## The theme contract
+
+A theme is a set of values for the [color roles](../foundations/color/) plus the files that hand them to each app. These are the apps a theme covers today; the list is a draft to confirm.
+
+| App                       | What it draws                                                |
+| ------------------------- | ------------------------------------------------------------ |
+| Terminal                  | Text, the cursor, selections and the sixteen terminal colors |
+| Bar                       | Workspaces, the clock and status icons along the screen edge |
+| Launcher                  | The menu that finds apps, commands and files                 |
+| Notifications             | Messages in the corner, by urgency                           |
+| Lock screen               | The password field over the wallpaper                        |
+| On-screen display         | Volume and brightness while they change                      |
+| Window borders            | The active window and the rest                               |
+| Editor and system monitor | Terminal apps with their own themes                          |
+
+## Coming next
+
+<Cards
+  items={[
+    { title: "Theme anatomy", blurb: "Which role paints which part of each app, drawn out." },
+    {
+      title: "Components",
+      blurb:
+        "The bar, launcher, notifications and lock screen, one page each, shown in more than one theme.",
+    },
+    {
+      title: "Patterns",
+      blurb: "Keybindings, menus, first run, and theming an app that isn't covered yet.",
+    },
+  ]}
+/>

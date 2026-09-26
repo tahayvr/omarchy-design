@@ -1,4 +1,4 @@
-# Omarchy Design — the site is plain HTML, CSS and ES modules; Vite only serves and bundles it.
+# Omarchy Design — the docs are Astro pages; the tools in public/ are plain HTML, CSS and ES modules.
 alias d := dev
 alias c := check
 
@@ -8,13 +8,13 @@ default: dev
 install:
     pnpm install
 
-# run the dev server (home, /logo/, /icon/, /type/)
+# run the dev server (docs, plus /logo/ and /icon/)
 dev:
-    pnpm vite
+    pnpm astro dev
 
 # lint and format-check everything, the way CI would
 check:
-    pnpm oxfmt
+    pnpm oxfmt --check
     pnpm oxlint
 
 # rewrite files to the house format and fix what oxlint can fix
@@ -22,14 +22,18 @@ fix:
     pnpm oxfmt
     pnpm oxlint --fix
 
-# bundle every page into dist/
+# build the site into dist/
 build:
-    pnpm vite build
+    pnpm astro build
+
+# build as GitHub Pages serves it, under /omarchy-design/
+build-pages:
+    BASE_PATH=/omarchy-design/ pnpm astro build
 
 # serve the built site
 preview: build
-    pnpm vite preview
+    pnpm astro preview
 
 # remove build output
 clean:
-    rm -rf dist
+    rm -rf dist .astro

@@ -1,0 +1,81 @@
+---
+/* A grid of doors to other pages. An item with no href is planned and
+   shows as "soon" without a link. */
+import { url } from "../data/nav";
+
+type Item = { title: string; href?: string; blurb: string; tag?: string };
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+const href = (h: string) => (/^https?:/.test(h) ? h : url(h));
+---
+
+<div class="cards">
+  {
+    items.map((it) =>
+      it.href ? (
+        <a class="card" href={href(it.href)}>
+          <span class="ctitle">
+            {it.title}
+            {it.tag && <span class="tag">{it.tag}</span>}
+          </span>
+          <span class="cblurb">{it.blurb}</span>
+        </a>
+      ) : (
+        <div class="card soon">
+          <span class="ctitle">
+            {it.title}
+            <span class="tag">soon</span>
+          </span>
+          <span class="cblurb">{it.blurb}</span>
+        </div>
+      ),
+    )
+  }
+</div>
+
+<style>
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    border-top: 1px solid var(--guide);
+    border-left: 1px solid var(--guide);
+    margin: 0 0 32px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 20px 22px;
+    border-right: 1px solid var(--guide);
+    border-bottom: 1px solid var(--guide);
+    text-decoration: none;
+    color: var(--ink2);
+    transition: background 0.15s;
+  }
+  a.card {
+    border-bottom: 1px solid var(--guide);
+  }
+  a.card:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .ctitle {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .cblurb {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .soon .ctitle,
+  .soon .cblurb {
+    color: var(--dim2);
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+/* The docs shell: header with the section doors, the sidebar, breadcrumbs,
+   the page, and an "on this page" list. MDX pages reach it through their
+   `layout` frontmatter (props arrive as frontmatter + headings + file);
+   .astro pages pass the same fields directly. */
+import Base from "./Base.astro";
+import { NAV, url, sectionOf } from "../data/nav";
+import "../styles/docs.css";
+
+type Heading = { depth: number; slug: string; text: string };
+interface Props {
+  frontmatter?: { title: string; description?: string; status?: string };
+  title?: string;
+  description?: string;
+  status?: string;
+  headings?: Heading[];
+  file?: string;
+}
+
+const p = Astro.props;
+const fm = p.frontmatter ?? p;
+const { title, description, status } = fm as { title: string; description?: string; status?: string };
+const toc = (p.headings ?? []).filter((h) => h.depth === 2);
+
+const here = Astro.url.pathname;
+const section = sectionOf(here);
+const isHere = (href?: string) => !!href && url(href) === here;
+
+const repo = "https://github.com/tahayvr/omarchy-design/blob/master/";
+const source = p.file ? p.file.slice(p.file.indexOf("src/pages/")) : undefined;
+---
+
+<Base title={title} description={description}>
+  <div class="docs" data-open="false">
+    <header class="top">
+      <a class="home" href={url("/")} title="Omarchy Design home">
+        <img class="mark" src={url("/assets/marks/omarchy-design-line.svg")} alt="omarchy design" />
+      </a>
+      <nav class="doors" aria-label="sections">
+        {
+          NAV.map((s) => (
+            <a href={url(s.href)} aria-current={s === section ? "true" : undefined}>
+              {s.title}
+            </a>
+          ))
+        }
+      </nav>
+      <button class="menu" type="button" aria-controls="side" aria-expanded="false">menu</button>
+    </header>
+
+    <aside class="side" id="side">
+      <nav aria-label="pages">
+        {
+          NAV.map((s) => (
+            <div class="group" data-here={s === section ? "true" : undefined}>
+              <a class="gtitle" href={url(s.href)}>
+                {s.title}
+              </a>
+              <ul>
+                {s.items.map((it) =>
+                  it.href ? (
+                    <li>
+                      <a href={url(it.href)} aria-current={isHere(it.href) ? "page" : undefined}>
+                        {it.title}
+                        {it.tool && <span class="tag">tool</span>}
+                      </a>
+                    </li>
+                  ) : (
+                    <li class="soon">
+                      {it.title}
+                      <span class="tag">soon</span>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="crumbs">
+        {section && <a href={url(section.href)}>{section.title}</a>}
+        {section && title !== section.title && <span>/</span>}
+        {section && title !== section.title && <span>{title}</span>}
+        {status && <span class="status">{status}</span>}
+      </div>
+      <h1>{title}</h1>
+      {description && <p class="lede">{description}</p>}
+      <article class="prose">
+        <slot />
+      </article>
+      {
+        source && (
+          <footer class="foot">
+            <a href={repo + source}>edit this page on github</a>
+          </footer>
+        )
+      }
+    </main>
+
+    {
+      toc.length > 1 && (
+        <nav class="toc" aria-label="on this page">
+          <p class="toctitle">On this page</p>
+          <ul>
+            {toc.map((h) => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+  </div>
+</Base>
+
+<script>
+  /* phone menu: the sidebar slides over the page */
+  const docs = document.querySelector<HTMLElement>(".docs")!;
+  const btn = document.querySelector<HTMLButtonElement>(".menu")!;
+  const set = (open: boolean) => {
+    docs.dataset.open = String(open);
+    btn.setAttribute("aria-expanded", String(open));
+    btn.textContent = open ? "close" : "menu";
+  };
+  btn.addEventListener("click", () => set(docs.dataset.open !== "true"));
+  addEventListener("keydown", (e) => e.key === "Escape" && set(false));
+  /* a tap on the dimmed page closes it */
+  document.addEventListener("click", (e) => {
+    const t = e.target as Element;
+    if (docs.dataset.open === "true" && !t.closest(".side, .menu")) set(false);
+  });
+
+  /* "on this page": mark the section being read */
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".toc a")];
+  const targets = links
+    .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+    .filter((el): el is HTMLElement => !!el);
+  if (targets.length) {
+    const mark = () => {
+      const y = innerHeight * 0.25;
+      let cur = targets[0];
+      for (const t of targets) if (t.getBoundingClientRect().top <= y) cur = t;
+      for (const a of links) a.toggleAttribute("data-here", a.hash.slice(1) === cur.id);
+    };
+    addEventListener("scroll", mark, { passive: true });
+    mark();
+  }
+</script>
