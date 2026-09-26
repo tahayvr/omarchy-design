@@ -11,7 +11,7 @@ const { kind } = Astro.props;
 const menuRows = ["Apps", "Learn", "Trigger", "Style", "Setup", "Update", "System"];
 ---
 
-<div class:list={["shot", `shot-${kind}`]} role="img" aria-label={`Schematic of the ${kind.replace(/-/g, " ")}`}>
+<div class:list={["shot", `shot-${kind}`]} data-pagefind-ignore role="img" aria-label={`Schematic of the ${kind.replace(/-/g, " ")}`}>
   {
     (kind === "bar" || kind === "popups" || kind === "anatomy") && (
       <div class="bar">

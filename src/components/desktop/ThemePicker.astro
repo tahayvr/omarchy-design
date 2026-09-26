@@ -20,7 +20,7 @@ const rootCss = `:root{${Object.entries(start)
 
 <Fragment set:html={`<style>${rootCss}</style>`} />
 
-<div class="theme-picker" data-initial={initial}>
+<div class="theme-picker" data-initial={initial} data-pagefind-ignore>
   <label>
     <span class="lbl">Preview in</span>
     <select class="pick">

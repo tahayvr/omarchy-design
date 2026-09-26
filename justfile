@@ -8,7 +8,7 @@ default: dev
 install:
     pnpm install
 
-# run the dev server (docs, plus /logo/ and /icon/)
+# run the dev server (docs, plus /logo/ and /icon/); search uses the last build's index
 dev:
     pnpm astro dev
 
@@ -22,13 +22,13 @@ fix:
     pnpm oxfmt
     pnpm oxlint --fix
 
-# build the site into dist/
+# build the site into dist/, with its search index
 build:
-    pnpm astro build
+    pnpm build
 
 # build as GitHub Pages serves it, under /omarchy-design/
 build-pages:
-    BASE_PATH=/omarchy-design/ pnpm astro build
+    BASE_PATH=/omarchy-design/ pnpm build
 
 # serve the built site
 preview: build

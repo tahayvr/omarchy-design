@@ -1,0 +1,341 @@
+---
+/* Site search: a button in the header, "/" or Ctrl/⌘ K from anywhere, and a
+   dialog driven from the keyboard. Results come from the Pagefind index that
+   `pnpm build` writes to dist/pagefind; it loads on first open. */
+interface Props {
+  label?: string;
+}
+const { label = "search" } = Astro.props;
+---
+
+<button class="search-btn" type="button" aria-haspopup="dialog" data-search-open>
+  {label}
+  <kbd>/</kbd>
+</button>
+
+<dialog class="search-dlg" aria-label="Search the docs">
+  <form method="dialog" class="sbox">
+    <input
+      type="search"
+      name="q"
+      placeholder="Search the docs"
+      autocomplete="off"
+      spellcheck="false"
+      aria-controls="search-results"
+    />
+    <button type="submit" class="close" aria-label="Close search">esc</button>
+  </form>
+  <p class="status" aria-live="polite"></p>
+  <ul class="results" id="search-results"></ul>
+  <p class="keys" aria-hidden="true">
+    <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+    <span><kbd>enter</kbd> open</span>
+    <span><kbd>esc</kbd> close</span>
+  </p>
+</dialog>
+
+<script>
+  type Hit = { url: string; title: string; excerpt: string; section?: string; subs: { url: string; title: string }[] };
+  type Pagefind = {
+    options: (o: object) => Promise<void>;
+    debouncedSearch: (
+      q: string,
+      o?: object,
+      ms?: number,
+    ) => Promise<{ results: { data: () => Promise<Record<string, any>> }[] } | null>;
+  };
+
+  const dlg = document.querySelector<HTMLDialogElement>(".search-dlg")!;
+  const input = dlg.querySelector<HTMLInputElement>("input")!;
+  const list = dlg.querySelector<HTMLUListElement>(".results")!;
+  const status = dlg.querySelector<HTMLElement>(".status")!;
+  const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+  /* The index only exists in the built site, so the bundler must leave this
+     import alone; its preload wrapper breaks it in an inlined script. */
+  const importAt = new Function("u", "return import(u)") as (u: string) => Promise<unknown>;
+
+  let pagefind: Pagefind | null | undefined;
+  async function load(): Promise<Pagefind | null> {
+    if (pagefind !== undefined) return pagefind;
+    try {
+      pagefind = (await importAt(`${base}pagefind/pagefind.js`)) as Pagefind;
+      await pagefind.options({ baseUrl: base, excerptLength: 18 });
+    } catch {
+      pagefind = null;
+    }
+    return pagefind;
+  }
+
+  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  /* Pagefind's excerpts are escaped text with <mark> around matches; keep only that */
+  const marks = (s: string) => s.replace(/<(?!\/?mark>)[^>]*>/g, "");
+
+  let active = -1;
+  const hits = () => [...list.querySelectorAll<HTMLAnchorElement>("a")];
+  function setActive(i: number) {
+    const all = hits();
+    if (!all.length) return;
+    active = (i + all.length) % all.length;
+    all.forEach((a, n) => a.toggleAttribute("data-active", n === active));
+    all[active].scrollIntoView({ block: "nearest" });
+  }
+
+  function render(results: Hit[], q: string) {
+    active = -1;
+    list.innerHTML = results
+      .map(
+        (r) => `<li>
+          <a class="hit" href="${esc(r.url)}">
+            ${r.section ? `<span class="sec">${esc(r.section)}</span>` : ""}
+            <span class="ttl">${esc(r.title)}</span>
+            <span class="exc">${marks(r.excerpt)}</span>
+          </a>
+          ${r.subs.map((s) => `<a class="sub" href="${esc(s.url)}"># ${esc(s.title)}</a>`).join("")}
+        </li>`,
+      )
+      .join("");
+    status.textContent = q && !results.length ? `Nothing for “${q}”.` : "";
+    if (results.length) setActive(0);
+  }
+
+  async function run() {
+    const q = input.value.trim();
+    if (!q) return render([], "");
+    const pf = await load();
+    if (!pf) {
+      status.textContent = "The search index hasn't been built yet. Run `just build`, then reload.";
+      return;
+    }
+    const found = await pf.debouncedSearch(q, {}, 120);
+    if (!found) return; /* a newer query took over */
+    const data = await Promise.all(found.results.slice(0, 8).map((r) => r.data()));
+    render(
+      data.map((d) => ({
+        url: d.url,
+        title: d.meta?.title ?? d.url,
+        excerpt: d.excerpt ?? "",
+        section: d.meta?.section,
+        subs: (d.sub_results ?? [])
+          .filter((s: { url: string }) => s.url !== d.url && s.url.includes("#"))
+          .slice(0, 3)
+          .map((s: { url: string; title: string }) => ({ url: s.url, title: s.title })),
+      })),
+      q,
+    );
+  }
+
+  function open() {
+    if (dlg.open) return;
+    dlg.showModal();
+    input.select();
+    void load();
+  }
+
+  document.querySelectorAll("[data-search-open]").forEach((b) => b.addEventListener("click", open));
+  addEventListener("keydown", (e) => {
+    const t = e.target as HTMLElement;
+    const typing = t.closest("input, textarea, select, [contenteditable]");
+    if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
+      e.preventDefault();
+      open();
+    }
+  });
+  input.addEventListener("input", run);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setActive(active + (e.key === "ArrowDown" ? 1 : -1));
+    } else if (e.key === "Enter") {
+      const a = hits()[active];
+      if (a) {
+        e.preventDefault();
+        location.href = a.href;
+      }
+    }
+  });
+  /* a click on the backdrop closes it */
+  dlg.addEventListener("click", (e) => {
+    if (e.target === dlg) dlg.close();
+  });
+  /* following a result to another part of the same page */
+  list.addEventListener("click", (e) => {
+    if ((e.target as Element).closest("a")) dlg.close();
+  });
+</script>
+
+<style>
+  .search-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    margin-right: 24px;
+    padding: 6px 8px 6px 12px;
+    border: 1px solid var(--line2);
+    font-size: 12px;
+    color: var(--ink2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .search-btn:hover {
+    color: #fff;
+    border-color: var(--neutral-500);
+  }
+  kbd {
+    font: inherit;
+    font-size: 11px;
+    letter-spacing: 0;
+    text-transform: none;
+    padding: 0 5px;
+    border: 1px solid var(--line2);
+    color: var(--dim);
+  }
+
+  .search-dlg {
+    width: min(640px, calc(100vw - 32px));
+    max-height: min(560px, calc(100vh - 20vh));
+    margin: 12vh auto 0;
+    padding: 0;
+    background: var(--brand-surface);
+    color: var(--ink);
+    border: 1px solid var(--guide);
+    font: 13px/1.5 var(--mono);
+    display: none;
+    flex-direction: column;
+  }
+  .search-dlg[open] {
+    display: flex;
+  }
+  .search-dlg::backdrop {
+    background: var(--scrim);
+  }
+  .sbox {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--guide);
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 16px 18px;
+    background: none;
+    border: none;
+    color: #fff;
+    font: 15px var(--mono);
+    outline: none;
+  }
+  input::-webkit-search-cancel-button {
+    display: none;
+  }
+  .close {
+    margin-right: 14px;
+    font-size: 11px;
+    color: var(--dim);
+    border: 1px solid var(--line2);
+    padding: 0 6px;
+  }
+  .status {
+    margin: 0;
+    padding: 0 18px;
+    color: var(--dim);
+    font-size: 12px;
+  }
+  .status:not(:empty) {
+    padding: 14px 18px;
+  }
+  .results {
+    list-style: none;
+    margin: 0;
+    padding: 6px 0;
+    overflow-y: auto;
+  }
+  .results:empty {
+    display: none;
+  }
+  .results :global(li) {
+    border-bottom: 1px solid var(--guide);
+  }
+  .results :global(li:last-child) {
+    border-bottom: none;
+  }
+  .results :global(a) {
+    position: relative;
+    display: block;
+    padding: 10px 18px;
+    color: var(--ink2);
+    text-decoration: none;
+  }
+  .results :global(a[data-active]),
+  .results :global(a:hover) {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  /* the chosen result gets the sidebar's bar */
+  .results :global(a[data-active])::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: #fff;
+  }
+  .results :global(.sec) {
+    display: block;
+    font-size: 10px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .results :global(.ttl) {
+    display: block;
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .results :global(.exc) {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+  }
+  .results :global(mark) {
+    background: none;
+    color: #fff;
+    border-bottom: 1px solid var(--neutral-400);
+  }
+  .results :global(a.sub) {
+    padding: 4px 18px 4px 30px;
+    font-size: 12px;
+    color: var(--dim);
+  }
+  .results :global(a.sub:last-child) {
+    padding-bottom: 10px;
+  }
+  .keys {
+    display: flex;
+    gap: 18px;
+    margin: 0;
+    padding: 10px 18px;
+    border-top: 1px solid var(--guide);
+    font-size: 11px;
+    color: var(--dim);
+  }
+  .keys kbd {
+    margin-right: 3px;
+  }
+
+  @media (max-width: 900px) {
+    .search-btn {
+      margin-right: 8px;
+    }
+    .search-btn kbd,
+    .keys {
+      display: none;
+    }
+    .search-dlg {
+      margin-top: 16px;
+      max-height: calc(100vh - 32px);
+    }
+  }
+</style>

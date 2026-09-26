@@ -1,0 +1,42 @@
+---
+/* Missing pages land here, wherever they were asked for, so every link is
+   absolute. Kept out of the search index. */
+import Docs from "../layouts/Docs.astro";
+import Cards from "../components/Cards.astro";
+import { NAV } from "../data/nav";
+---
+
+<Docs
+  title="Nothing here"
+  description="This page doesn't exist, or it moved when the site was rebuilt. Search for it, or start from one of the sections."
+  noindex
+>
+  <p class="try">
+    <button type="button" class="find" data-search-open>Search the docs <kbd>/</kbd></button>
+  </p>
+  <Cards items={NAV.map((s) => ({ title: s.title, href: s.href, blurb: s.blurb }))} />
+</Docs>
+
+<style>
+  .find {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: var(--hot);
+    color: var(--hot-ink);
+    font-weight: 500;
+  }
+  .find:hover {
+    background: var(--hot-hover);
+  }
+  kbd {
+    font: inherit;
+    font-size: 11px;
+    padding: 0 5px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  .try {
+    margin-bottom: 32px;
+  }
+</style>

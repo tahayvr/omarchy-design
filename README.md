@@ -21,4 +21,6 @@ just check     # format and lint, as CI does
 just build     # static site in dist/
 ```
 
+Search is [Pagefind](https://pagefind.app/): `just build` indexes the finished site into `dist/pagefind`, and the dev server borrows the index from the last build. Only pages using the docs layout are indexed.
+
 Pushes to `master` deploy to GitHub Pages through `.github/workflows/deploy.yml`, built under `/omarchy-design/`.

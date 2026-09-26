@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
@@ -22,7 +22,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
     "oxfmt": "^0.68.0",
-    "oxlint": "^1.83.0"
+    "oxlint": "^1.83.0",
+    "pagefind": "^1.5.2"
   },
   "lint-staged": {
     "*": "oxfmt --no-error-on-unmatched-pattern",

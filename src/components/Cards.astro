@@ -16,19 +16,19 @@ const href = (h: string) => (/^https?:/.test(h) ? h : url(h));
     items.map((it) =>
       it.href ? (
         <a class="card" href={href(it.href)}>
-          <span class="ctitle">
+          <div class="ctitle">
             {it.title}
             {it.tag && <span class="tag">{it.tag}</span>}
-          </span>
-          <span class="cblurb">{it.blurb}</span>
+          </div>
+          <div class="cblurb">{it.blurb}</div>
         </a>
       ) : (
         <div class="card soon">
-          <span class="ctitle">
+          <div class="ctitle">
             {it.title}
             <span class="tag">soon</span>
-          </span>
-          <span class="cblurb">{it.blurb}</span>
+          </div>
+          <div class="cblurb">{it.blurb}</div>
         </div>
       ),
     )

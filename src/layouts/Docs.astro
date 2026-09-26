@@ -4,6 +4,7 @@
    `layout` frontmatter (props arrive as frontmatter + headings + file);
    .astro pages pass the same fields directly. */
 import Base from "./Base.astro";
+import Search from "../components/Search.astro";
 import { NAV, url, sectionOf } from "../data/nav";
 import "../styles/docs.css";
 
@@ -15,6 +16,8 @@ interface Props {
   status?: string;
   headings?: Heading[];
   file?: string;
+  /* keep the page out of search (the 404) */
+  noindex?: boolean;
 }
 
 const p = Astro.props;
@@ -45,6 +48,7 @@ const source = p.file?.includes("src/") ? p.file.slice(p.file.indexOf("src/")) :
           ))
         }
       </nav>
+      <Search />
       <button class="menu" type="button" aria-controls="side" aria-expanded="false">menu</button>
     </header>
 
@@ -79,21 +83,25 @@ const source = p.file?.includes("src/") ? p.file.slice(p.file.indexOf("src/")) :
       </nav>
     </aside>
 
-    <main class="main">
-      <div class="crumbs">
+    <main
+      class="main"
+      data-pagefind-body={p.noindex ? undefined : ""}
+      data-pagefind-meta={section ? `section:${section.title}` : undefined}
+    >
+      <div class="crumbs" data-pagefind-ignore>
         {section && <a href={url(section.href)}>{section.title}</a>}
         {section && title !== section.title && <span>/</span>}
         {section && title !== section.title && <span>{title}</span>}
         {status && <span class="status">{status}</span>}
       </div>
-      <h1>{title}</h1>
+      <h1 data-pagefind-meta="title">{title}</h1>
       {description && <p class="lede">{description}</p>}
       <article class="prose">
         <slot />
       </article>
       {
         source && (
-          <footer class="foot">
+          <footer class="foot" data-pagefind-ignore>
             <a href={repo + source}>edit this page on github</a>
           </footer>
         )
